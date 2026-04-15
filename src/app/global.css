@@ -1,0 +1,265 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+/* font-family: "Poppins", sans-serif; */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+/* font-family: "Inter", sans-serif; */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* ================= BASE COLORS ================= */
+
+  --color-background: oklch(0.9796 0.010054 32.5157);
+  --color-foreground: oklch(0.249 0.0204 236.59);
+
+  --color-card: oklch(0.9796 0.010054 32.5157);
+  --color-card-foreground: oklch(0.249 0.0204 236.59);
+
+  --color-popover: oklch(0.9796 0.010054 32.5157);
+  --color-popover-foreground: oklch(0.249 0.0204 236.59);
+
+  /* ================= BRAND PRIMARY (#83b4ff) ================= */
+  --color-primary: oklch(0.72 0.12 250);
+  --color-primary-foreground: oklch(0.9796 0.010054 32.5157);
+
+  /* ================= SECONDARY / MUTED ================= */
+  --color-secondary: oklch(0.94 0.005 250);
+  --color-secondary-foreground: oklch(0.249 0.0204 236.59);
+
+  --color-muted: oklch(0.94 0.005 250);
+  --color-muted-foreground: oklch(0.55 0.01 250);
+
+  /* ================= ACCENT ================= */
+  --color-accent: oklch(0.9 0.02 250);
+  --color-accent-foreground: oklch(0.249 0.0204 236.59);
+
+  /* ================= DESTRUCTIVE ================= */
+  --color-destructive: oklch(0.704 0.191 22.216);
+  --color-destructive-foreground: oklch(0.985 0 0);
+
+  /* ================= ACTIVE (your highlight) ================= */
+  --color-active: oklch(0.72 0.12 250);
+
+  /* ================= BORDER / INPUT / RING ================= */
+  --color-border: oklch(0.88 0.005 250);
+  --color-input: oklch(0.94 0.005 250);
+  --color-ring: oklch(0.72 0.12 250);
+
+  /* ================= CHART COLORS (kept safe) ================= */
+  --color-chart-1: oklch(87% 0 0);
+  --color-chart-2: oklch(70.8% 0 0);
+  --color-chart-3: oklch(55.6% 0 0);
+  --color-chart-4: oklch(43.9% 0 0);
+  --color-chart-5: oklch(37.1% 0 0);
+
+  /* ================= SIDEBAR ================= */
+  --color-sidebar: oklch(0.249 0.0204 236.59);
+  --color-sidebar-foreground: oklch(0.9796 0.010054 32.5157);
+
+  --color-sidebar-primary: oklch(0.72 0.12 250);
+  --color-sidebar-primary-foreground: oklch(0.9796 0.010054 32.5157);
+
+  --color-sidebar-accent: oklch(0.269 0 0);
+  --color-sidebar-accent-foreground: oklch(0.985 0 0);
+
+  --color-sidebar-border: oklch(1 0 0 / 10%);
+  --color-sidebar-ring: oklch(0.439 0 0);
+
+  --color-sidebar-default: oklch(0.725 0.009 255.37);
+
+  /* ================= HEADER / FOOTER ================= */
+  --color-header: oklch(0.249 0.0204 236.59);
+  --color-header-foreground: oklch(0.9796 0.010054 32.5157);
+
+  --color-footer: oklch(0.145 0 0);
+  --color-footer-foreground: oklch(0.985 0 0);
+
+  /* ================= CODE ================= */
+  --color-code: oklch(0.2 0 0);
+  --color-code-foreground: oklch(0.708 0 0);
+  --color-code-highlight: oklch(0.27 0 0);
+  --color-code-number: oklch(0.72 0 0);
+  --color-code-selection: oklch(0.922 0 0);
+  --color-code-border: oklch(1 0 0 / 10%);
+
+  /* ================= EXTRA BRAND COLORS (kept yours) ================= */
+  --color-black-secondary: #414651;
+  --color-placeholder: #717680;
+  --color-placeholder-subtle: #d5d7da;
+  --color-text-white: #fff6f4;
+  --color-line-primary: #003121;
+
+  --color-card-one: #fffaf3;
+  --color-card-two: #f9fafc;
+  --color-hero-secondary: #fafafa;
+  --color-background-rev: #f5f5f5;
+  --color-red-primary: #fef3f2;
+
+  --color-arrow-primary: #181d27;
+  --color-arrow-secondary: #a4a7ae;
+
+  /* ================= SYSTEM ================= */
+  --radius: 0.5rem;
+  --sidebar-bg: var(--color-foreground);
+
+  /* Fonts */
+  --display-family: "Poppins", sans-serif;
+  --body-family: "Inter", sans-serif;
+
+  /* Spatial System */
+  --spacing-4: 0.25rem;
+  --spacing-8: 0.5rem;
+  --spacing-12: 0.75rem;
+  --spacing-16: 1rem;
+  --spacing-20: 1.25rem;
+  --spacing-24: 1.5rem;
+  --spacing-28: 1.75rem;
+  --spacing-32: 2rem;
+  --spacing-36: 2.25rem;
+  --spacing-40: 2.5rem;
+  --spacing-44: 2.75rem;
+  --spacing-48: 3rem;
+  --spacing-52: 3.25rem;
+  --spacing-56: 3.5rem;
+  --spacing-60: 3.75rem;
+  --spacing-64: 4rem;
+  --spacing-68: 4.25rem;
+  --spacing-72: 4.5rem;
+  --spacing-76: 4.75rem;
+  --spacing-80: 5rem;
+  --spacing-84: 5.25rem;
+  --spacing-88: 5.5rem;
+  --spacing-92: 5.75rem;
+  --spacing-96: 6rem;
+  --spacing-100: 6.25rem;
+  --spacing-104: 6.5rem;
+  --spacing-108: 6.75rem;
+  --spacing-112: 7rem;
+  --spacing-116: 7.25rem;
+  --spacing-120: 7.5rem;
+  --spacing-124: 7.75rem;
+  --spacing-128: 8rem;
+  --spacing-132: 8.25rem;
+  --spacing-136: 8.5rem;
+  --spacing-140: 8.75rem;
+  --spacing-144: 9rem;
+  --spacing-148: 9.25rem;
+  --spacing-152: 9.5rem;
+  --spacing-156: 9.75rem;
+  --spacing-160: 10rem;
+  --spacing-164: 10.25rem;
+  --spacing-168: 10.5rem;
+  --spacing-172: 10.75rem;
+  --spacing-176: 11rem;
+  --spacing-180: 11.25rem;
+  --spacing-184: 11.5rem;
+  --spacing-188: 11.75rem;
+  --spacing-192: 12rem;
+  --spacing-196: 12.25rem;
+  --spacing-200: 12.5rem;
+  --spacing-204: 12.75rem;
+  --spacing-208: 13rem;
+  --spacing-212: 13.25rem;
+  --spacing-216: 13.5rem;
+  --spacing-220: 13.75rem;
+  --spacing-224: 14rem;
+  --spacing-228: 14.25rem;
+  --spacing-232: 14.5rem;
+  --spacing-236: 14.75rem;
+  --spacing-240: 15rem;
+  --spacing-244: 15.25rem;
+  --spacing-248: 15.5rem;
+  --spacing-252: 15.75rem;
+  --spacing-256: 16rem;
+
+  /* Container width */
+  --max-w-screen-xl: 90rem; /* 1440px */
+
+  --sheet-width: 38rem;
+
+  --color-black-secondary: #414651;
+  --color-placeholder: #717680;
+  --color-placeholder-subtle: #d5d7da;
+  --color-text-white: #fff6f4;
+  --color-line-primary: #003121;
+
+  /* Style for Cards */
+  --color-card-one: #fffaf3;
+  --color-card-two: #f9fafc;
+  --color-hero-secondary: #fafafa;
+  --color-background-rev: #f5f5f5;
+  --color-red-primary: #fef3f2;
+
+  /* Color for Arrow */
+  --color-arrow-primary: #181d27;
+  --color-arrow-secondary: #a4a7ae;
+
+  --sidebar-bg: var(--color-foreground);
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--display-family);
+    font-weight: 700;
+  }
+
+  .font-body {
+    font-family: var(--body-family);
+    font-weight: 400;
+  }
+
+  .main-container {
+    width: 100%;
+    margin-inline: auto;
+    max-width: var(--max-w-screen-xl);
+    padding-inline: var(--spacing-16);
+  }
+
+  @media (min-width: 640px) {
+    .main-container {
+      padding-inline: var(--spacing-24);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .main-container {
+      padding-inline: var(--spacing-32);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .main-container {
+      padding-inline: var(--spacing-40);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .main-container {
+      padding-inline: var(--spacing-56);
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .main-container {
+      padding-inline: var(--spacing-80);
+    }
+  }
+
+  .text-white {
+    color: var(--color-background);
+  }
+
+  .text-black {
+    color: var(--color-foreground);
+  }
+
+  .text-black-secondary {
+    color: var(--color-black-secondary);
+  }
+
+  .text-placeholder {
+    color: var(--color-placeholder);
+  }
+}
