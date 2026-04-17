@@ -1,46 +1,37 @@
 import type { ReactNode } from "react";
-import Link from "next/link";
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
   SidebarInset,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarProvider,
-  SidebarSeparator,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import AppSidebar from "@/my-components/admin/app-sidebar";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
-    <SidebarProvider>
-      <Sidebar>
-        <SidebarHeader className="px-4 py-3 font-display text-sm tracking-wide">
-          Admin
-        </SidebarHeader>
-        <SidebarSeparator />
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel>Overview</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link href="/admin">Dashboard</Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </SidebarContent>
-      </Sidebar>
-      <SidebarInset>
-        <div className="p-6">{children}</div>
-      </SidebarInset>
-    </SidebarProvider>
+    <TooltipProvider>
+      <SidebarProvider
+        style={
+          {
+            "--sidebar-width": "220px",
+            "--sidebar-width-icon": "3.5rem",
+          } as React.CSSProperties
+        }
+        className="flex min-h-screen w-full md:[&_[data-slot=sidebar-gap]]:w-0"
+      >
+        <AppSidebar />
+
+        <SidebarInset className="flex min-w-0 flex-1 flex-col md:ml-[var(--sidebar-width)] md:peer-data-[state=collapsed]:ml-[var(--sidebar-width-icon)] transition-[margin-left] duration-200 ease-linear">
+          <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b bg-background/95 px-4 shadow-xs md:h-16 md:px-6">
+            <SidebarTrigger />
+            <p className="font-display text-sm text-black-secondary">
+              Admin Console
+            </p>
+          </header>
+
+          <div className="p-4 md:p-6">{children}</div>
+        </SidebarInset>
+      </SidebarProvider>
+    </TooltipProvider>
   );
 }
