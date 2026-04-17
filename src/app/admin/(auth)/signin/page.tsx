@@ -2,6 +2,9 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import AuthForm from "@/app/admin/(auth)/signin/_components/AuthForm";
+import { useSignIn } from "@/features/auth/queries/auth.queries";
+import { useMutationCallbacks } from "@/hooks/use-mutation-callbacks";
+import { useRouter, useSearchParams } from "next/navigation";
 import { z } from "zod";
 
 type SignInPageProps = {
@@ -18,7 +21,27 @@ export default function SignInPage({
   title = "Administrator Access",
   subtitle = "Enter your credentials to continue to the system.",
 }: SignInPageProps) {
-  const handleSubmit = async (_data: z.infer<typeof signInSchema>) => {};
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirectUrl") ?? "/admin";
+
+  const signInMutation = useSignIn();
+  const { buildCallbacks } = useMutationCallbacks({
+    entityName: "Authentication",
+  });
+
+  const handleSubmit = async (data: z.infer<typeof signInSchema>) => {
+    signInMutation.mutate(
+      { ...data, device_name: "admin-web" },
+      buildCallbacks("change", "Session", {
+        successMessage: "Signed in successfully.",
+        errorMessage: "Sign in failed.",
+        onSuccess: () => {
+          router.replace(redirectUrl);
+        },
+      }),
+    );
+  };
 
   return (
     <section className="min-h-screen flex justify-center py-24">
@@ -36,7 +59,11 @@ export default function SignInPage({
 
         <Card className="w-full max-w-lg rounded-2xl border-none shadow-xs mt-8 py-12 px-4">
           <CardContent>
-            <AuthForm schema={signInSchema} onSubmit={handleSubmit} />
+            <AuthForm
+              schema={signInSchema}
+              onSubmit={handleSubmit}
+              isSubmittingExternal={signInMutation.isPending}
+            />
           </CardContent>
         </Card>
       </div>
