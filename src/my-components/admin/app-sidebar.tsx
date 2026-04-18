@@ -94,8 +94,11 @@ export default function AppSidebar() {
   };
 
   return (
-    <Sidebar collapsible="icon" className="h-full">
-      <SidebarContent className="flex h-full flex-col bg-background text-black">
+    <Sidebar
+      collapsible="icon"
+      className="h-full w-(--sidebar-width) min-w-(--sidebar-width) max-w-(--sidebar-width) group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[collapsible=icon]:min-w-(--sidebar-width-icon) group-data-[collapsible=icon]:max-w-(--sidebar-width-icon)"
+    >
+      <SidebarContent className="flex h-full w-full max-w-full flex-col overflow-x-hidden bg-background text-black">
         <SidebarHeader className="px-3 py-4">
           {isCollapsed ? (
             <div className="flex h-8 w-8 items-center justify-center rounded-md bg-white/10 font-display text-sm tracking-wide">
@@ -219,7 +222,7 @@ export default function AppSidebar() {
           </SidebarGroup>
         </div>
 
-        <SidebarFooter className="px-3 pb-5">
+        <SidebarFooter className="w-full max-w-full px-3 pb-5">
           <SidebarMenu className="gap-1">
             <SidebarMenuItem>
               <SidebarMenuButton
@@ -230,7 +233,7 @@ export default function AppSidebar() {
                 disabled={logoutMutation.isPending}
               >
                 <LogOut className="h-4 w-4 shrink-0" />
-                <span className="group-data-[collapsible=icon]:hidden">
+                <span className="truncate group-data-[collapsible=icon]:hidden">
                   {logoutMutation.isPending ? "Signing out..." : "Sign out"}
                 </span>
               </SidebarMenuButton>
@@ -239,12 +242,12 @@ export default function AppSidebar() {
 
           <SidebarSeparator className="my-3 opacity-25 group-data-[collapsible=icon]:hidden" />
           {!isCollapsed && (
-            <div className="flex items-center gap-3 rounded-lg px-2 py-3">
+            <div className="flex w-full min-w-0 max-w-full items-center gap-3 overflow-hidden rounded-lg px-2 py-3">
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-600 text-sm font-semibold uppercase">
                 {user?.name?.charAt(0) ?? "A"}
               </div>
 
-              <div className="min-w-0 overflow-hidden">
+              <div className="min-w-0 flex-1 overflow-hidden">
                 <p className="truncate whitespace-nowrap text-sm text-black">
                   {user?.name ?? "Admin User"}
                 </p>

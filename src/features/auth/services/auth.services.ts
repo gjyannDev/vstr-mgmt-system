@@ -76,17 +76,6 @@ class AuthService {
       params,
     );
   }
-
-  customerPing() {
-    return apiClient.get<SessionCheckPayload>("/api/customer/ping");
-  }
-
-  customerLocationCheck(params: LocationCheckParams) {
-    return apiClient.post<LocationCheckPayload, LocationCheckParams>(
-      "/api/customer/location-check",
-      params,
-    );
-  }
 }
 
 export const authService = new AuthService();

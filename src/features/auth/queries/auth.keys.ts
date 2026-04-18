@@ -15,8 +15,6 @@ export const authKeys = {
     adminPing: () => [...authKeys.access.all(), "admin", "ping"] as const,
 
     kioskPing: () => [...authKeys.access.all(), "kiosk", "ping"] as const,
-
-    customerPing: () => [...authKeys.access.all(), "customer", "ping"] as const,
   },
 
   location: {
@@ -24,8 +22,5 @@ export const authKeys = {
 
     kioskCheck: (filters?: { location_id?: number }) =>
       [...authKeys.location.all(), "kiosk-check", filters] as const,
-
-    customerCheck: (filters?: { location_id?: number }) =>
-      [...authKeys.location.all(), "customer-check", filters] as const,
   },
 };

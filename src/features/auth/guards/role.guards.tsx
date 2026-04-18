@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import type { User } from "@/features/auth/types/auth.type";
 

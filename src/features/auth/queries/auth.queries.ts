@@ -101,30 +101,10 @@ export const useKioskPing = () => {
   });
 };
 
-export const useCustomerPing = () => {
-  const token = useAuthStore((state) => state.token);
-
-  return useQuery<SessionCheckPayload, Error>({
-    queryKey: authKeys.access.customerPing(),
-    queryFn: () => authService.customerPing(),
-    enabled: Boolean(token),
-  });
-};
-
 export const useKioskLocationCheck = () => {
   return useMutation({
     mutationFn: (payload: LocationCheckParams) =>
       authService.kioskLocationCheck(payload),
-    onError: (err) => {
-      console.error(err);
-    },
-  });
-};
-
-export const useCustomerLocationCheck = () => {
-  return useMutation({
-    mutationFn: (payload: LocationCheckParams) =>
-      authService.customerLocationCheck(payload),
     onError: (err) => {
       console.error(err);
     },

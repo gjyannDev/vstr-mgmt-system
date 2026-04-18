@@ -13,7 +13,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       <SidebarProvider
         style={
           {
-            "--sidebar-width": "220px",
+            "--sidebar-width": "16rem",
             "--sidebar-width-icon": "3.5rem",
           } as React.CSSProperties
         }
