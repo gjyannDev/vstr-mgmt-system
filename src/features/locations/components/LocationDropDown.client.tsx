@@ -112,7 +112,7 @@ export default function LocationDropDown({ location }: LocationDropDownProps) {
       />
 
       <Sheet open={updateOpen} onOpenChange={handleUpdateSheetOpenChange}>
-        <SheetContent className="flex flex-col p-0 sm:max-w-md">
+        <SheetContent className="flex flex-col p-0 sm:max-w-md z-50">
           <div className="sticky top-0 z-10 border-b bg-background p-4">
             <SheetHeader className="flex flex-col gap-0">
               <SheetTitle className="font-display text-lg">

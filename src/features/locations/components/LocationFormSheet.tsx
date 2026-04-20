@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { useMutationCallbacks } from "@/hooks/use-mutation-callbacks";
 import { TextField } from "@/my-components/shared/form/TextField";
+import { SelectField } from "@/my-components/shared/form/SelectField";
 import {
   useCreateLocation,
   useUpdateLocation,
@@ -24,6 +25,32 @@ interface LocationFormSheetProps {
   onSuccess?: () => void;
   onDirtyChange?: (isDirty: boolean) => void;
 }
+
+const LOCATION_TYPE_OPTIONS = [
+  { value: "store", label: "Store" },
+  { value: "warehouse", label: "Warehouse" },
+  { value: "hub", label: "Hub" },
+];
+
+const LOCATION_STATE_OPTIONS = [
+  { value: "ncr", label: "NCR (National Capital Region)" },
+  { value: "car", label: "CAR (Cordillera Administrative Region)" },
+  { value: "ilocos", label: "Ilocos Region" },
+  { value: "cagayan_valley", label: "Cagayan Valley" },
+  { value: "central_luzon", label: "Central Luzon" },
+  { value: "calabarzon", label: "CALABARZON" },
+  { value: "mimaropa", label: "MIMAROPA" },
+  { value: "bicol", label: "Bicol Region" },
+  { value: "western_visayas", label: "Western Visayas" },
+  { value: "central_visayas", label: "Central Visayas" },
+  { value: "eastern_visayas", label: "Eastern Visayas" },
+  { value: "zamboanga", label: "Zamboanga Peninsula" },
+  { value: "northern_mindanao", label: "Northern Mindanao" },
+  { value: "davao", label: "Davao Region" },
+  { value: "soccsksargen", label: "SOCCSKSARGEN" },
+  { value: "caraga", label: "Caraga" },
+  { value: "barmm", label: "BARMM" },
+];
 
 const normalizeOptional = (value?: string) => {
   const trimmed = value?.trim();
@@ -58,6 +85,7 @@ export default function LocationFormSheet({
 
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isDirty },
   } = form;
@@ -108,11 +136,13 @@ export default function LocationFormSheet({
           register={register}
           error={errors.name?.message}
         />
-        <TextField
+        <SelectField
           name="type"
           label="Type"
-          placeholder="Store / Warehouse / Hub"
-          register={register}
+          control={control}
+          options={LOCATION_TYPE_OPTIONS}
+          placeholder="Select type"
+          fullWidth
           error={errors.type?.message}
         />
         <TextField
@@ -129,11 +159,13 @@ export default function LocationFormSheet({
           register={register}
           error={errors.city?.message}
         />
-        <TextField
+        <SelectField
           name="state"
           label="State"
-          placeholder="State"
-          register={register}
+          control={control}
+          options={LOCATION_STATE_OPTIONS}
+          placeholder="Select state"
+          fullWidth
           error={errors.state?.message}
         />
       </div>

@@ -41,8 +41,23 @@ const LOCATION_TYPE_OPTIONS = [
 ];
 
 const LOCATION_STATE_OPTIONS = [
-  { value: "active", label: "Active" },
-  { value: "inactive", label: "Inactive" },
+  { value: "ncr", label: "NCR (National Capital Region)" },
+  { value: "car", label: "CAR (Cordillera Administrative Region)" },
+  { value: "ilocos", label: "Ilocos Region" },
+  { value: "cagayan_valley", label: "Cagayan Valley" },
+  { value: "central_luzon", label: "Central Luzon" },
+  { value: "calabarzon", label: "CALABARZON" },
+  { value: "mimaropa", label: "MIMAROPA" },
+  { value: "bicol", label: "Bicol Region" },
+  { value: "western_visayas", label: "Western Visayas" },
+  { value: "central_visayas", label: "Central Visayas" },
+  { value: "eastern_visayas", label: "Eastern Visayas" },
+  { value: "zamboanga", label: "Zamboanga Peninsula" },
+  { value: "northern_mindanao", label: "Northern Mindanao" },
+  { value: "davao", label: "Davao Region" },
+  { value: "soccsksargen", label: "SOCCSKSARGEN" },
+  { value: "caraga", label: "Caraga" },
+  { value: "barmm", label: "BARMM" },
 ];
 
 const getTodayDate = () => new Date().toISOString().slice(0, 10);
