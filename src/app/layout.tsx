@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import "./global.css";
-import { Geist } from "next/font/google";
+import { poppins, inter } from "./fonts";
 import { cn } from "@/lib/utils";
 import QueryProvider from "@/components/providers/query-client-provider";
 import { Toaster } from "@/components/ui/sonner";
-
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "VISITNA!",
@@ -18,9 +16,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("h-full antialiased", "font-sans", geist.variable)}
+      className={cn("h-full antialiased", poppins.variable, inter.variable)}
     >
-      <body className="min-h-full flex flex-col font-body">
+      <body className="min-h-full flex flex-col font-body main-container">
         <QueryProvider>
           {children}
           <Toaster />

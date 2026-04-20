@@ -8,6 +8,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-inter)", "system-ui"],
+        display: ["var(--font-poppins)", "system-ui"],
+      },
       colors: {
         border: "var(--color-border)",
         input: "var(--color-input)",
