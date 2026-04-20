@@ -1,3 +1,5 @@
+"use client";
+
 import { ErrorAlert } from "@/my-components/ui/ErrorAlert";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -12,8 +14,11 @@ import { EmptyStateSmallPage } from "@/my-components/ui/EmptyStateSmallPage";
 import type { Table as RTTable } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
 import { List } from "lucide-react";
-import { Tooltip, TooltipContent } from "@/components/ui/tooltip";
-import { TooltipTrigger } from "@radix-ui/react-tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface DataTableProps<TData> {
   table: RTTable<TData>;
