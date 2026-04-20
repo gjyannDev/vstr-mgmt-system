@@ -5,6 +5,8 @@ const ADMIN_HOME_PATH = "/admin";
 const ALLOWED_ADMIN_ROLES = ["admin", "super_admin"] as const;
 const KIOSK_SUCCESS_PATH = "/activate/success";
 const KIOSK_ACTIVATE_PATH = "/activate";
+const KIOSK_VERIFY_PATH = "/activate/verify";
+const KIOSK_VERIFY_MANUAL_PATH = "/activate/verify-manual";
 const ALLOWED_KIOSK_ROLES = ["kiosk"] as const;
 
 type AdminRole = (typeof ALLOWED_ADMIN_ROLES)[number];
@@ -31,9 +33,19 @@ export function proxy(request: NextRequest) {
 
   const token = request.cookies.get("auth_token")?.value;
   const role = request.cookies.get("auth_role")?.value;
+  const hasKioskSession = Boolean(token) && isKioskRole(role);
+
+  if (
+    (pathname === KIOSK_ACTIVATE_PATH ||
+      pathname === KIOSK_VERIFY_PATH ||
+      pathname === KIOSK_VERIFY_MANUAL_PATH) &&
+    hasKioskSession
+  ) {
+    return NextResponse.redirect(new URL(KIOSK_SUCCESS_PATH, request.url));
+  }
 
   if (pathname === KIOSK_SUCCESS_PATH) {
-    if (!token || !isKioskRole(role)) {
+    if (!hasKioskSession) {
       return NextResponse.redirect(new URL(KIOSK_ACTIVATE_PATH, request.url));
     }
 
@@ -78,5 +90,11 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/activate/success"],
+  matcher: [
+    "/admin/:path*",
+    "/activate",
+    "/activate/verify",
+    "/activate/verify-manual",
+    "/activate/success",
+  ],
 };

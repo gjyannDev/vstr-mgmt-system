@@ -2,28 +2,50 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useKioskActivate } from "@/features/auth/queries/auth.queries";
+import {
+  kioskActivationSchema,
+  type KioskActivationValues,
+} from "@/features/auth/schemas/auth.schema";
+import { useMutationCallbacks } from "@/hooks/use-mutation-callbacks";
 import { TextField } from "@/my-components/shared/form/TextField";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import type { z } from "zod";
-import { activationSchema } from "@/features/auth/schemas/auth.schema";
 
 export default function Page() {
-  const form = useForm<z.infer<typeof activationSchema>>({
-    resolver: zodResolver(activationSchema),
+  const router = useRouter();
+  const activateKioskMutation = useKioskActivate();
+  const { buildCallbacks } = useMutationCallbacks({
+    entityName: "Kiosk",
+  });
+
+  const form = useForm<KioskActivationValues>({
+    resolver: zodResolver(kioskActivationSchema),
     defaultValues: {
-      activationCode: "",
+      code: "",
     },
   });
 
   const {
     handleSubmit,
     register,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = form;
 
-  const onSubmit = (data: z.infer<typeof activationSchema>) => {
-    console.log("Activation code:", data.activationCode);
+  const onSubmit = (data: KioskActivationValues) => {
+    activateKioskMutation.mutate(
+      {
+        code: data.code,
+      },
+      buildCallbacks("change", "Activation", {
+        successMessage: "Kiosk activated successfully.",
+        errorMessage: "Activation failed.",
+        onSuccess: () => {
+          router.replace("/activate/success");
+        },
+      }),
+    );
   };
 
   return (
@@ -49,15 +71,25 @@ export default function Page() {
               noValidate
             >
               <TextField
-                name="activationCode"
+                name="code"
                 label="Activation Code"
                 placeholder="Enter code"
                 register={register}
-                error={errors.activationCode?.message}
+                registerOptions={{
+                  setValueAs: (value) =>
+                    typeof value === "string"
+                      ? value.trim().toUpperCase()
+                      : value,
+                }}
+                error={errors.code?.message}
                 autoComplete="one-time-code"
               />
-              <Button className="w-full" size="lg" disabled={isSubmitting}>
-                {isSubmitting ? "Activating..." : "Activate"}
+              <Button
+                className="w-full"
+                size="lg"
+                disabled={activateKioskMutation.isPending}
+              >
+                {activateKioskMutation.isPending ? "Activating..." : "Activate"}
               </Button>
             </form>
           </div>

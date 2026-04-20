@@ -17,6 +17,14 @@ export const authKeys = {
     kioskPing: () => [...authKeys.access.all(), "kiosk", "ping"] as const,
   },
 
+  kiosk: {
+    all: () => [...authKeys.all, "kiosk"] as const,
+
+    activation: () => [...authKeys.kiosk.all(), "activation"] as const,
+
+    me: () => [...authKeys.kiosk.all(), "me"] as const,
+  },
+
   location: {
     all: () => [...authKeys.all, "location"] as const,
 

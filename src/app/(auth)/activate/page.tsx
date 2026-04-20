@@ -39,7 +39,7 @@ export default function Page() {
               <Button
                 className="w-full h-12"
                 size="lg"
-                onClick={() => router.push("activate/verify-manual")}
+                onClick={() => router.push("/activate/verify-manual")}
               >
                 Manual Input
               </Button>

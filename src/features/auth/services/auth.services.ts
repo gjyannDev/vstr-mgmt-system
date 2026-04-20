@@ -1,42 +1,19 @@
 import { apiClient } from "@/lib/api/api.client";
 
-import type { User } from "@/features/auth/types/auth.type";
-
-export type RegisterParams = {
-  name: string;
-  email: string;
-  password: string;
-  password_confirmation: string;
-  device_name?: string;
-};
-
-export type LoginParams = {
-  email: string;
-  password: string;
-  device_name?: string;
-};
-
-export type AuthPayload = {
-  user: User;
-  token: string;
-};
-
-export type UserPayload = {
-  user: User;
-};
-
-export type SessionCheckPayload = {
-  user_id: number | null;
-  role: User["role"] | null;
-};
-
-export type LocationCheckParams = {
-  location_id: number;
-};
-
-export type LocationCheckPayload = SessionCheckPayload & {
-  location_id: number | null;
-};
+import type {
+  KioskDevice,
+  User,
+  RegisterParams,
+  LoginParams,
+  AuthPayload,
+  UserPayload,
+  SessionCheckPayload,
+  LocationCheckParams,
+  LocationCheckPayload,
+  ActivateKioskParams,
+  KioskActivationPayload,
+  KioskProfilePayload,
+} from "@/features/auth/types/auth.type";
 
 class AuthService {
   register(params: RegisterParams) {
@@ -75,6 +52,21 @@ class AuthService {
       "/api/kiosk/location-check",
       params,
     );
+  }
+
+  activateKiosk(params: ActivateKioskParams) {
+    return apiClient.post<KioskActivationPayload, ActivateKioskParams>(
+      "/api/kiosk/activate",
+      params,
+    );
+  }
+
+  getKioskMe() {
+    return apiClient.get<KioskProfilePayload>("/api/kiosk/me");
+  }
+
+  logoutKiosk() {
+    return apiClient.post<null, Record<string, never>>("/api/kiosk/logout", {});
   }
 }
 
