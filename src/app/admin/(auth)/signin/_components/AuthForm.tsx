@@ -1,18 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldSet,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { FieldGroup, FieldSet } from "@/components/ui/field";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import type { z } from "zod";
 import { PasswordField } from "@/my-components/shared/form/PasswordField";
+import { TextField } from "@/my-components/shared/form/TextField";
 
 type AuthFormValues = {
   email: string;
@@ -58,18 +52,15 @@ export default function AuthForm({
       <FieldSet>
         <FieldGroup>
           {/* Email */}
-          <Field>
-            <FieldLabel htmlFor="email">Email</FieldLabel>
-            <Input
-              id="email"
-              type="email"
-              autoComplete="email"
-              placeholder="Enter email"
-              className="placeholder:text-sm placeholder:text-placeholder"
-              {...register("email")}
-            />
-            <FieldError>{errors.email?.message}</FieldError>
-          </Field>
+          <TextField
+            name="email"
+            label="Email"
+            type="email"
+            placeholder="Enter email"
+            autoComplete="email"
+            register={register}
+            error={errors.email?.message}
+          />
 
           {/* Password */}
           <PasswordField
@@ -93,7 +84,7 @@ export default function AuthForm({
         type="submit"
         variant="default"
         size="sm"
-        className="w-full"
+        className="w-full h-10"
         disabled={disabled}
       >
         {disabled ? "Signing in..." : "Sign in"}

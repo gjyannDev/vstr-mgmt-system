@@ -57,7 +57,7 @@ export default function SignInPage({
           )}
         </div>
 
-        <Card className="w-full max-w-lg rounded-2xl border-none shadow-xs mt-8 py-12 px-4">
+        <Card className="w-full max-w-lg rounded-2xl border-none shadow-md mt-8 py-12 px-4">
           <CardContent>
             <AuthForm
               schema={signInSchema}
