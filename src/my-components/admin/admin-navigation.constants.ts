@@ -1,6 +1,8 @@
 import {
   LayoutDashboard,
   type LucideIcon,
+  MapPin,
+  Monitor,
   Settings,
   UserPlus,
   Users,
@@ -31,7 +33,7 @@ export const MAIN_ADMIN_NAV_ITEMS: AdminNavItem[] = [
     title: "Dashboard",
     icon: LayoutDashboard,
     url: "/admin",
-    roles: ["admin", "super_admin"],
+    roles: ["admin"],
   },
   {
     key: "visitors",
@@ -49,14 +51,35 @@ export const MAIN_ADMIN_NAV_ITEMS: AdminNavItem[] = [
         url: "/admin/visit-logs",
       },
     ],
-    roles: ["admin", "super_admin"],
+    roles: ["admin"],
   },
   {
     key: "staffs",
     title: "Staffs",
     icon: UserPlus,
     url: "/admin/staff",
-    roles: ["admin", "super_admin"],
+    roles: ["admin"],
+  },
+  {
+    key: "user-management",
+    title: "Admins",
+    icon: UserPlus,
+    url: "/admin/user-management",
+    roles: ["super_admin"],
+  },
+  {
+    key: "locations",
+    title: "Locations",
+    icon: MapPin,
+    url: "/admin/locations",
+    roles: ["super_admin"],
+  },
+  {
+    key: "kiosk-management",
+    title: "Kiosks",
+    icon: Monitor,
+    url: "/admin/kiosks",
+    roles: ["super_admin"],
   },
 ];
 
