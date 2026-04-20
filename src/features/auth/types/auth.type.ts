@@ -67,6 +67,7 @@ export type KioskDevice = {
 };
 
 export type AuthState = {
+  hydrated: boolean;
   user: User | null;
   token: string | null;
 

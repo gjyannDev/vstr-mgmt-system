@@ -39,25 +39,26 @@ function syncAuthCookies(token: string | null, role: string | null) {
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
+      hydrated: false,
       user: null,
       token: null,
 
       setAuth: ({ user, token }) => {
         syncAuthCookies(token, user.role);
-        set({ user, token });
+        set({ hydrated: true, user, token });
       },
       setUser: (user) => {
         syncAuthCookies(get().token, user?.role ?? null);
-        set({ user });
+        set({ hydrated: true, user });
       },
       setToken: (token) => {
         syncAuthCookies(token, get().user?.role ?? null);
-        set({ token });
+        set({ hydrated: true, token });
       },
 
       clearAuth: () => {
         syncAuthCookies(null, null);
-        set({ user: null, token: null });
+        set({ hydrated: true, user: null, token: null });
       },
     }),
     {

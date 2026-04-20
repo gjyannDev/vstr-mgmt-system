@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ChevronRight, LogOut } from "lucide-react";
@@ -58,6 +58,11 @@ export default function AppSidebar() {
   const user = useAuthStore((store) => store.user);
   const { buildCallbacks } = useMutationCallbacks({ entityName: "Session" });
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
+  const hydrated = useAuthStore((store) => store.hydrated);
+
+  useEffect(() => {
+    useAuthStore.setState({ hydrated: true });
+  }, []);
 
   const userRole: AdminNavRole = user?.role ?? "admin";
   const isCollapsed = state === "collapsed";
@@ -113,149 +118,160 @@ export default function AppSidebar() {
 
         <SidebarSeparator className="opacity-20" />
 
-        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
-          <SidebarGroup>
-            <SidebarGroupContent>
-              <SidebarMenu className="gap-1">
-                {filteredMainItems.map((item) => {
-                  const Icon = item.icon;
+        {!hydrated ? (
+          <div className="flex min-h-0 flex-1 flex-col overflow-y-auto" />
+        ) : (
+          <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+            <SidebarGroup>
+              <SidebarGroupContent>
+                <SidebarMenu className="gap-1">
+                  {filteredMainItems.map((item) => {
+                    const Icon = item.icon;
 
-                  if (item.children && item.children.length > 0) {
-                    const visibleChildren = item.children.filter(
-                      (child) => !child.roles || child.roles.includes(userRole),
-                    );
-                    const isChildActive = visibleChildren.some((child) =>
-                      isPathActive(pathname, child.url),
-                    );
-                    const isOpen = openGroups[item.key] ?? isChildActive;
+                    if (item.children && item.children.length > 0) {
+                      const visibleChildren = item.children.filter(
+                        (child) =>
+                          !child.roles || child.roles.includes(userRole),
+                      );
+                      const isChildActive = visibleChildren.some((child) =>
+                        isPathActive(pathname, child.url),
+                      );
+                      const isOpen = openGroups[item.key] ?? isChildActive;
+
+                      return (
+                        <SidebarMenuItem key={item.key}>
+                          <SidebarMenuButton
+                            size="lg"
+                            tooltip={item.title}
+                            isActive={isChildActive}
+                            onClick={() =>
+                              setOpenGroups((prev) => ({
+                                ...prev,
+                                [item.key]: !isOpen,
+                              }))
+                            }
+                          >
+                            <Icon className="h-5 w-5 shrink-0" />
+                            <span className="truncate group-data-[collapsible=icon]:hidden">
+                              {item.title}
+                            </span>
+                            <ChevronRight
+                              className={cn(
+                                "ml-auto h-4 w-4 transition-transform group-data-[collapsible=icon]:hidden",
+                                isOpen && "rotate-90",
+                              )}
+                            />
+                          </SidebarMenuButton>
+
+                          {isOpen && (
+                            <SidebarMenuSub>
+                              {visibleChildren.map((child) => (
+                                <SidebarMenuSubItem key={child.key}>
+                                  <SidebarMenuSubButton
+                                    asChild
+                                    isActive={isPathActive(pathname, child.url)}
+                                    className="text-sm text-black"
+                                  >
+                                    <Link href={child.url}>{child.title}</Link>
+                                  </SidebarMenuSubButton>
+                                </SidebarMenuSubItem>
+                              ))}
+                            </SidebarMenuSub>
+                          )}
+                        </SidebarMenuItem>
+                      );
+                    }
 
                     return (
                       <SidebarMenuItem key={item.key}>
                         <SidebarMenuButton
+                          asChild
                           size="lg"
                           tooltip={item.title}
-                          isActive={isChildActive}
-                          onClick={() =>
-                            setOpenGroups((prev) => ({
-                              ...prev,
-                              [item.key]: !isOpen,
-                            }))
-                          }
+                          isActive={isPathActive(pathname, item.url)}
                         >
-                          <Icon className="h-5 w-5 shrink-0" />
-                          <span className="truncate group-data-[collapsible=icon]:hidden">
-                            {item.title}
-                          </span>
-                          <ChevronRight
-                            className={cn(
-                              "ml-auto h-4 w-4 transition-transform group-data-[collapsible=icon]:hidden",
-                              isOpen && "rotate-90",
-                            )}
-                          />
+                          <Link href={item.url ?? "#"}>
+                            <Icon className="h-5 w-5 shrink-0" />
+                            <span className="group-data-[collapsible=icon]:hidden">
+                              {item.title}
+                            </span>
+                          </Link>
                         </SidebarMenuButton>
-
-                        {isOpen && (
-                          <SidebarMenuSub>
-                            {visibleChildren.map((child) => (
-                              <SidebarMenuSubItem key={child.key}>
-                                <SidebarMenuSubButton
-                                  asChild
-                                  isActive={isPathActive(pathname, child.url)}
-                                  className="text-sm text-black"
-                                >
-                                  <Link href={child.url}>{child.title}</Link>
-                                </SidebarMenuSubButton>
-                              </SidebarMenuSubItem>
-                            ))}
-                          </SidebarMenuSub>
-                        )}
                       </SidebarMenuItem>
                     );
-                  }
+                  })}
+                </SidebarMenu>
 
-                  return (
-                    <SidebarMenuItem key={item.key}>
-                      <SidebarMenuButton
-                        asChild
-                        size="lg"
-                        tooltip={item.title}
-                        isActive={isPathActive(pathname, item.url)}
-                      >
-                        <Link href={item.url ?? "#"}>
-                          <Icon className="h-5 w-5 shrink-0" />
-                          <span className="group-data-[collapsible=icon]:hidden">
-                            {item.title}
-                          </span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  );
-                })}
-              </SidebarMenu>
+                <SidebarSeparator className="my-5 opacity-25 group-data-[collapsible=icon]:hidden" />
 
-              <SidebarSeparator className="my-5 opacity-25 group-data-[collapsible=icon]:hidden" />
+                <SidebarMenu className="gap-1">
+                  {filteredSecondaryItems.map((item) => {
+                    const Icon = item.icon;
 
-              <SidebarMenu className="gap-1">
-                {filteredSecondaryItems.map((item) => {
-                  const Icon = item.icon;
-
-                  return (
-                    <SidebarMenuItem key={item.key}>
-                      <SidebarMenuButton
-                        asChild
-                        size="lg"
-                        tooltip={item.title}
-                        isActive={isPathActive(pathname, item.url)}
-                      >
-                        <Link href={item.url ?? "#"}>
-                          <Icon className="h-4 w-4 shrink-0" />
-                          <span className="group-data-[collapsible=icon]:hidden">
-                            {item.title}
-                          </span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  );
-                })}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </div>
+                    return (
+                      <SidebarMenuItem key={item.key}>
+                        <SidebarMenuButton
+                          asChild
+                          size="lg"
+                          tooltip={item.title}
+                          isActive={isPathActive(pathname, item.url)}
+                        >
+                          <Link href={item.url ?? "#"}>
+                            <Icon className="h-4 w-4 shrink-0" />
+                            <span className="group-data-[collapsible=icon]:hidden">
+                              {item.title}
+                            </span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  })}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </div>
+        )}
 
         <SidebarFooter className="w-full max-w-full px-3 pb-5">
-          <SidebarMenu className="gap-1">
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                size="lg"
-                tooltip="Sign out"
-                className="cursor-pointer text-red-300/90 hover:bg-red-500/10 hover:text-red-300"
-                onClick={handleSignOut}
-                disabled={logoutMutation.isPending}
-              >
-                <LogOut className="h-4 w-4 shrink-0" />
-                <span className="truncate group-data-[collapsible=icon]:hidden">
-                  {logoutMutation.isPending ? "Signing out..." : "Sign out"}
-                </span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
+          {!hydrated ? (
+            <div className="w-full" />
+          ) : (
+            <>
+              <SidebarMenu className="gap-1">
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    size="lg"
+                    tooltip="Sign out"
+                    className="cursor-pointer text-red-300/90 hover:bg-red-500/10 hover:text-red-300"
+                    onClick={handleSignOut}
+                    disabled={logoutMutation.isPending}
+                  >
+                    <LogOut className="h-4 w-4 shrink-0" />
+                    <span className="truncate group-data-[collapsible=icon]:hidden">
+                      {logoutMutation.isPending ? "Signing out..." : "Sign out"}
+                    </span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
 
-          <SidebarSeparator className="my-3 opacity-25 group-data-[collapsible=icon]:hidden" />
-          {!isCollapsed && (
-            <div className="flex w-full min-w-0 max-w-full items-center gap-3 overflow-hidden rounded-lg px-2 py-3">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-600 text-sm font-semibold uppercase">
-                {user?.name?.charAt(0) ?? "A"}
-              </div>
+              <SidebarSeparator className="my-3 opacity-25 group-data-[collapsible=icon]:hidden" />
+              {!isCollapsed && (
+                <div className="flex w-full min-w-0 max-w-full items-center gap-3 overflow-hidden rounded-lg px-2 py-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-600 text-sm font-semibold uppercase">
+                    {user?.name?.charAt(0) ?? "A"}
+                  </div>
 
-              <div className="min-w-0 flex-1 overflow-hidden">
-                <p className="truncate whitespace-nowrap text-sm text-black">
-                  {user?.name ?? "Admin User"}
-                </p>
-                <p className="truncate whitespace-nowrap text-xs text-placeholder-subtle">
-                  {user?.email ?? "admin@visitna.local"}
-                </p>
-              </div>
-            </div>
+                  <div className="min-w-0 flex-1 overflow-hidden">
+                    <p className="truncate whitespace-nowrap text-sm text-black">
+                      {user?.name ?? "Admin User"}
+                    </p>
+                    <p className="truncate whitespace-nowrap text-xs text-placeholder-subtle">
+                      {user?.email ?? "admin@visitna.local"}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </SidebarFooter>
       </SidebarContent>

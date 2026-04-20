@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import type { User } from "@/features/auth/types/auth.type";
@@ -27,20 +27,7 @@ export default function RoleGuard({
   const router = useRouter();
   const pathname = usePathname();
   const user = useAuthStore((state) => state.user);
-
-  const [hydrated, setHydrated] = useState(useAuthStore.persist.hasHydrated());
-
-  useEffect(() => {
-    if (hydrated) {
-      return;
-    }
-
-    const unsubscribe = useAuthStore.persist.onFinishHydration(() => {
-      setHydrated(true);
-    });
-
-    return unsubscribe;
-  }, [hydrated]);
+  const hydrated = useAuthStore((state) => state.hydrated);
 
   const allowedRoles = useMemo(
     () => resolveAllowedRoles(requiredRole),
