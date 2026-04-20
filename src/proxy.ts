@@ -28,7 +28,7 @@ function isKioskRole(role: string | undefined): role is KioskRole {
   return ALLOWED_KIOSK_ROLES.includes(role as KioskRole);
 }
 
-export function proxy(request: NextRequest) {
+export default function middleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
   const token = request.cookies.get("auth_token")?.value;
