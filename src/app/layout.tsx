@@ -18,7 +18,7 @@ export default function RootLayout({
       lang="en"
       className={cn("h-full antialiased", poppins.variable, inter.variable)}
     >
-      <body className="min-h-full flex flex-col font-body main-container">
+      <body className="min-h-full flex flex-col font-body">
         <QueryProvider>
           {children}
           <Toaster />
