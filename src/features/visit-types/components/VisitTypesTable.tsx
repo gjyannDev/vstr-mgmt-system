@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { PlusIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/my-components/ui/data-table";
@@ -11,6 +12,14 @@ import VisitTypeFormSheet from "@/features/visit-types/components/VisitTypeFormS
 import { useGetVisitTypes } from "@/features/visit-types/queries/visit-type.queries";
 import { visitTypeColumns } from "@/features/visit-types/components/visit-type.column";
 import type { VisitType } from "@/features/visit-types/schemas/visit-type.schemas";
+import { TextField } from "@/my-components/shared/form/TextField";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 
 interface Props {
   locationId: string;
@@ -21,7 +30,9 @@ export default function VisitTypesTable({ locationId }: Props) {
   const [pageSize, setPageSize] = useState(10);
   const [createOpen, setCreateOpen] = useState(false);
 
-  const [search, setSearch] = useState("");
+  const form = useForm<{ search?: string }>({ defaultValues: { search: "" } });
+  const { register, watch } = form;
+  const search = (watch("search") as string) || "";
 
   useEffect(() => setPageIndex(0), [search]);
 
@@ -55,20 +66,40 @@ export default function VisitTypesTable({ locationId }: Props) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <div />
-        <div className="flex items-center gap-2">
-          <input
-            placeholder="Search"
-            className="input"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <Button onClick={() => setCreateOpen(true)}>
-            <PlusIcon className="mr-2 h-4 w-4" /> New Visit Type
-          </Button>
-        </div>
-      </div>
+      <Card className="border bg-card shadow-sm">
+        <CardHeader className="pb-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-lg font-display">Filters</CardTitle>
+              <CardDescription className="font-body">
+                Filter visit types
+              </CardDescription>
+            </div>
+
+            <Button
+              type="button"
+              variant="default"
+              className="h-10 rounded-md"
+              size="lg"
+              onClick={() => setCreateOpen(true)}
+            >
+              <PlusIcon className="mr-2 h-4 w-4" /> New Visit Type
+            </Button>
+          </div>
+        </CardHeader>
+
+        <CardContent>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <TextField
+              name="search"
+              label="Search"
+              placeholder="Search by name"
+              register={register}
+              disabled={createOpen}
+            />
+          </div>
+        </CardContent>
+      </Card>
 
       <DataTable
         table={table}

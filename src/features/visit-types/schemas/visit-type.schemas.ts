@@ -24,6 +24,7 @@ export const VisitTypeSchema = z.object({
   location_id: z.string(),
   name: z.string(),
   description: z.string().nullable().optional(),
+  is_camera_active: z.boolean().optional(),
   requires_approval: z.boolean(),
   active: z.boolean(),
   form_fields: z.array(VisitTypeFieldSchema).nullable().optional(),
@@ -53,6 +54,7 @@ export const CreateFormFieldSchema = z.object({
 export const CreateVisitTypeSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().optional(),
+  is_camera_active: z.boolean().optional(),
   requires_approval: z.boolean().optional(),
   active: z.boolean().optional(),
   form_fields: z.array(CreateFormFieldSchema).optional(),

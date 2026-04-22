@@ -31,8 +31,8 @@ export default function LocationDetailsPage() {
     "p-0 border-b-2 border-transparent data-[state=active]:border-b-primary data-[state=active]:text-primary transition-colors rounded-none cursor-pointer";
 
   return (
-    <div className="p-4 sm:p-6">
-      <div className="mb-6">
+    <div className="p-4 sm:p-6 flex flex-col gap-6">
+      <div className="flex flex-col gap-4">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -53,10 +53,12 @@ export default function LocationDetailsPage() {
           </BreadcrumbList>
         </Breadcrumb>
 
-        <h2 className="text-lg font-display mt-2">
-          {location?.name ?? "Location"}
-        </h2>
-        <p className="text-sm text-muted-foreground">{address}</p>
+        <div className="flex flex-col">
+          <h2 className="text-lg font-display mt-2">
+            {location?.name ?? "Location"}
+          </h2>
+          <p className="text-sm text-muted-foreground">{address}</p>
+        </div>
       </div>
 
       <Tabs defaultValue="visit-types" className="w-full flex flex-col">

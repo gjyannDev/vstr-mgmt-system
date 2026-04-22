@@ -11,6 +11,8 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { TextField } from "@/my-components/shared/form/TextField";
+import { TextAreaField } from "@/my-components/shared/form/TextAreaField";
+import { CheckboxField } from "@/my-components/shared/form/CheckBoxField";
 import {
   CreateVisitTypeSchema,
   type CreateVisitTypeValues,
@@ -21,6 +23,7 @@ import {
   useUpdateVisitType,
 } from "@/features/visit-types/queries/visit-type.queries";
 import FormFieldDialog from "@/features/visit-types/components/FormFieldDialog";
+import { PlusIcon, Trash2Icon } from "lucide-react";
 
 interface Props {
   mode: "create" | "edit";
@@ -60,6 +63,7 @@ export default function VisitTypeFormSheet({
     defaultValues: {
       name: initialData?.name ?? "",
       description: initialData?.description ?? "",
+      is_camera_active: initialData?.is_camera_active ?? false,
       requires_approval: initialData?.requires_approval ?? false,
       active: initialData?.active ?? true,
       form_fields: [],
@@ -69,6 +73,7 @@ export default function VisitTypeFormSheet({
   const {
     register,
     handleSubmit,
+    control,
     formState: { isDirty },
   } = form;
 
@@ -107,7 +112,8 @@ export default function VisitTypeFormSheet({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="flex flex-col p-0 sm:max-w-md z-50">
+      <SheetContent className="flex flex-col p-0 sm:max-w-md z-50 h-full">
+        {/* Header */}
         <div className="sticky top-0 z-10 border-b bg-background p-4">
           <SheetHeader className="flex flex-col gap-0">
             <SheetTitle className="font-display text-lg">
@@ -116,18 +122,43 @@ export default function VisitTypeFormSheet({
           </SheetHeader>
         </div>
 
-        <div className="scroll-area flex-1 overflow-y-auto p-4">
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-4"
-          >
-            <TextField name="name" label="Name" register={register} />
+        {/* Scrollable Content */}
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col flex-1 overflow-hidden"
+        >
+          <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
+            {/* ALL YOUR FORM CONTENT HERE (no buttons) */}
 
+            <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-4">
+                <TextField name="name" label="Name" register={register} />
+
+                <TextAreaField
+                  name="description"
+                  label="Description"
+                  register={register}
+                />
+              </div>
+
+              <CheckboxField
+                name="is_camera_active"
+                control={control}
+                label="Capture visitor photo"
+                description="Ask admin if they'd like to capture a visitor's picture"
+              />
+            </div>
+
+            {/* Form Fields Section */}
             <div>
               <div className="flex items-center justify-between">
                 <h4 className="font-display font-semibold">Form Fields</h4>
-                <Button type="button" onClick={() => setFieldDialogOpen(true)}>
-                  Add Field
+                <Button
+                  type="button"
+                  className="rounded-full w-8 h-8"
+                  onClick={() => setFieldDialogOpen(true)}
+                >
+                  <PlusIcon className="h-4 w-4" />
                 </Button>
               </div>
 
@@ -143,40 +174,44 @@ export default function VisitTypeFormSheet({
                         {f.type} • {f.name}
                       </div>
                     </div>
-                    <div>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() =>
-                          setFields((s) => s.filter((_, i) => i !== idx))
-                        }
-                      >
-                        Remove
-                      </Button>
-                    </div>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() =>
+                        setFields((s) => s.filter((_, i) => i !== idx))
+                      }
+                    >
+                      <Trash2Icon />
+                    </Button>
                   </div>
                 ))}
               </div>
             </div>
+          </div>
 
-            <div className="mt-auto flex justify-end gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => onOpenChange(false)}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" disabled={isCreating || isUpdating}>
-                {isCreating || isUpdating
-                  ? "Saving..."
-                  : mode === "create"
-                    ? "Create"
-                    : "Update"}
-              </Button>
-            </div>
-          </form>
-        </div>
+          <div className="border-t p-4 flex justify-end gap-2 bg-background sticky bottom-0">
+            <Button
+              type="button"
+              variant="outline"
+              className="h-10 px-10 text-base"
+              onClick={() => onOpenChange(false)}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              type="submit"
+              className="h-10 px-10 text-base"
+              disabled={isCreating || isUpdating}
+            >
+              {isCreating || isUpdating
+                ? "Saving..."
+                : mode === "create"
+                  ? "Create"
+                  : "Update"}
+            </Button>
+          </div>
+        </form>
       </SheetContent>
 
       <FormFieldDialog
