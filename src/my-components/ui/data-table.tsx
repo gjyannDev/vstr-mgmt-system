@@ -53,7 +53,7 @@ export function DataTable<TData>({
                   className="px-3 py-3 border-b border-gray-200 last:border-r-0"
                 >
                   <Skeleton
-                    className={`h-12 ${widthPattern[(i + j) % widthPattern.length]} rounded-md`}
+                    className={`h-6 ${widthPattern[(i + j) % widthPattern.length]} rounded-md`}
                   />
                 </TableCell>
               ))}

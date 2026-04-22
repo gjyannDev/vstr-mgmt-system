@@ -61,17 +61,17 @@ export const MAIN_ADMIN_NAV_ITEMS: AdminNavItem[] = [
     roles: ["admin"],
   },
   {
-    key: "user-management",
-    title: "Admins",
-    icon: UserPlus,
-    url: "/admin/user-management",
-    roles: ["super_admin"],
-  },
-  {
     key: "locations",
     title: "Locations",
     icon: MapPin,
     url: "/admin/locations",
+    roles: ["super_admin"],
+  },
+  {
+    key: "user-management",
+    title: "Admins",
+    icon: UserPlus,
+    url: "/admin/user-management",
     roles: ["super_admin"],
   },
   {
