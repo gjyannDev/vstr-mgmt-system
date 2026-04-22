@@ -58,6 +58,10 @@ export type LocationListParams = {
 export const LocationSimpleSchema = z.object({
   id: z.string(),
   name: z.string(),
+  address_line1: z.string().nullable().optional(),
+  city: z.string().nullable().optional(),
+  state: z.string().nullable().optional(),
+  type: z.string().nullable().optional(),
 });
 
 export const LocationSimpleListSchema = z.object({
