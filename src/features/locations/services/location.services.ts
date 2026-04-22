@@ -2,10 +2,12 @@ import { apiClient } from "@/lib/api/api.client";
 import {
   LocationPaginatedResponseSchema,
   LocationSingleResponseSchema,
+  LocationSimpleListSchema,
   type LocationListParams,
   type LocationMutationValues,
   type LocationPaginatedResponse,
   type LocationSingleResponse,
+  type LocationSimpleList,
 } from "@/features/locations/schemas/location.schemas";
 
 class LocationService {
@@ -37,6 +39,17 @@ class LocationService {
     );
 
     return LocationSingleResponseSchema.parse(response);
+  }
+
+  async getSimpleList(search?: string): Promise<LocationSimpleList> {
+    const query = new URLSearchParams();
+    if (search) query.append("search", search);
+
+    const response = await apiClient.get<unknown>(
+      `${this.basePath}/list?${query.toString()}`,
+    );
+
+    return LocationSimpleListSchema.parse(response);
   }
 
   async createLocation(

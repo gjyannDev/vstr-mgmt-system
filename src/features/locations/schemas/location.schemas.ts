@@ -54,3 +54,14 @@ export type LocationListParams = {
   type?: string;
   state?: string;
 };
+
+export const LocationSimpleSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+});
+
+export const LocationSimpleListSchema = z.object({
+  rows: z.array(LocationSimpleSchema),
+});
+
+export type LocationSimpleList = z.infer<typeof LocationSimpleListSchema>;

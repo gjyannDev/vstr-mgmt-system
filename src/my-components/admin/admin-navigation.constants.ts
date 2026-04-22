@@ -68,10 +68,10 @@ export const MAIN_ADMIN_NAV_ITEMS: AdminNavItem[] = [
     roles: ["super_admin"],
   },
   {
-    key: "user-management",
+    key: "users",
     title: "Admins",
     icon: UserPlus,
-    url: "/admin/user-management",
+    url: "/admin/users",
     roles: ["super_admin"],
   },
   {

@@ -9,6 +9,7 @@ import type {
   LocationMutationValues,
   LocationPaginatedResponse,
   LocationSingleResponse,
+  LocationSimpleList,
 } from "@/features/locations/schemas/location.schemas";
 
 export const useGetLocations = (filters: LocationListParams) => {
@@ -25,6 +26,14 @@ export const useGetLocationById = (locationId: string) => {
     queryKey: locationKeys.detail.byId(locationId),
     queryFn: () => locationService.getLocationById(locationId),
     enabled: Boolean(locationId),
+    staleTime: 1000 * 60 * 2,
+  });
+};
+
+export const useGetLocationsSimple = (filters?: { search?: string }) => {
+  return useQuery<LocationSimpleList, Error>({
+    queryKey: locationKeys.list.simple(filters),
+    queryFn: () => locationService.getSimpleList(filters?.search),
     staleTime: 1000 * 60 * 2,
   });
 };

@@ -7,6 +7,8 @@ export const locationKeys = {
     all: () => [...locationKeys.all, "list"] as const,
     paginated: (filters: LocationListParams) =>
       [...locationKeys.list.all(), filters] as const,
+    simple: (filters?: { search?: string }) =>
+      [...locationKeys.list.all(), "simple", filters] as const,
   },
 
   detail: {
