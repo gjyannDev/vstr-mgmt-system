@@ -36,28 +36,17 @@ export const MAIN_ADMIN_NAV_ITEMS: AdminNavItem[] = [
     roles: ["admin"],
   },
   {
-    key: "visitors",
-    title: "Visitors",
-    icon: Users,
-    children: [
-      {
-        key: "visits",
-        title: "Visits",
-        url: "/admin/visits",
-      },
-      {
-        key: "visit-logs",
-        title: "Visit Logs",
-        url: "/admin/visit-logs",
-      },
-    ],
+    key: "my-locations",
+    title: "My Locations",
+    icon: MapPin,
+    url: "/admin/my-locations",
     roles: ["admin"],
   },
   {
-    key: "staffs",
-    title: "Staffs",
+    key: "visit-logs",
+    title: "Visit Logs",
     icon: UserPlus,
-    url: "/admin/staff",
+    url: "/admin/visit-logs",
     roles: ["admin"],
   },
   {
