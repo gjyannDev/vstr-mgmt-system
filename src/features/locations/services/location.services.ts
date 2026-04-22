@@ -20,7 +20,7 @@ class LocationService {
 
     query.append("pageIndex", String(params.pageIndex));
     query.append("pageSize", String(params.pageSize));
-    query.append("createdDate", params.createdDate);
+    if (params.createdDate) query.append("createdDate", params.createdDate);
 
     if (params.search) query.append("search", params.search);
     if (params.type) query.append("type", params.type);

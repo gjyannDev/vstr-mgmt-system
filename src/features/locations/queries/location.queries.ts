@@ -16,7 +16,7 @@ export const useGetLocations = (filters: LocationListParams) => {
   return useQuery<LocationPaginatedResponse, Error>({
     queryKey: locationKeys.list.paginated(filters),
     queryFn: () => locationService.getLocations(filters),
-    enabled: Boolean(filters.createdDate),
+    enabled: true,
     staleTime: 1000 * 60 * 2,
   });
 };

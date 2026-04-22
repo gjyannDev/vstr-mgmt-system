@@ -22,7 +22,7 @@ export const LocationSingleResponseSchema = z.object({
 });
 
 export const LocationFiltersSchema = z.object({
-  createdDate: z.string().min(1, "Date is required"),
+  createdDate: z.string().optional(),
   type: z.string().optional(),
   state: z.string().optional(),
   search: z.string().optional(),
@@ -49,7 +49,7 @@ export type LocationMutationValues = z.infer<typeof LocationMutationSchema>;
 export type LocationListParams = {
   pageIndex: number;
   pageSize: number;
-  createdDate: string;
+  createdDate?: string;
   search?: string;
   type?: string;
   state?: string;

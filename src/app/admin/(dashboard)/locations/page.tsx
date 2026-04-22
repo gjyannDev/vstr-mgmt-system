@@ -72,7 +72,7 @@ export default function LocationsPage() {
   const form = useForm<LocationFiltersValues>({
     resolver: zodResolver(LocationFiltersSchema),
     defaultValues: {
-      createdDate: getTodayDate(),
+      createdDate: undefined,
       type: "",
       state: "",
       search: "",
@@ -100,7 +100,7 @@ export default function LocationsPage() {
     isLoading,
     isError,
   } = useGetLocations({
-    createdDate,
+    createdDate: createdDate || undefined,
     type: type || undefined,
     state: state || undefined,
     search: search?.trim() || undefined,
@@ -218,7 +218,9 @@ export default function LocationsPage() {
           isError={isError}
           errorMessage="Failed to load locations"
           noDataMessage={
-            !createdDate ? "Please select a date." : "No locations found."
+            locationsData?.rows?.length === 0
+              ? "No locations found."
+              : undefined
           }
         />
         <DataTablePagination table={table} showSelected={false} />
