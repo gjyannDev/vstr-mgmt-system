@@ -39,6 +39,8 @@ export default function Page() {
       }
     }
 
+    console.log("payload", payload);
+
     create.mutate(payload, {
       onSuccess: (data: any) => {
         store.setVisitId(data.visit_id ?? null);

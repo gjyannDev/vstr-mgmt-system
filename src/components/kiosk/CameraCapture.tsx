@@ -2,7 +2,6 @@
 
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import Webcam from "react-webcam";
-import { uploadBase64 } from "@/lib/imagekit-client";
 import { Button } from "@/components/ui/button";
 
 type Props = {
@@ -30,15 +29,10 @@ export default function CameraCapture({
     setPreview(imageSrc);
     onChange?.(imageSrc);
     setError(null);
-    try {
-      setUploading(true);
-      const url = await uploadBase64(imageSrc);
-      onUpload(url);
-    } catch (err) {
-      setError((err as any)?.message ?? String(err));
-    } finally {
-      setUploading(false);
-    }
+    // Instead of attempting a direct client-side ImageKit upload (which
+    // requires a signed auth endpoint), pass the base64 up to the parent.
+    // The server will perform the upload and persist the `photo_url`.
+    onUpload(imageSrc);
   }, [onChange, onUpload]);
 
   const startCountdown = () => {
@@ -70,15 +64,8 @@ export default function CameraCapture({
   const retryUpload = async () => {
     if (!preview) return;
     setError(null);
-    try {
-      setUploading(true);
-      const url = await uploadBase64(preview);
-      onUpload(url);
-    } catch (err) {
-      setError((err as any)?.message ?? String(err));
-    } finally {
-      setUploading(false);
-    }
+    // Pass the preview up for server-side upload retry
+    onUpload(preview);
   };
 
   const usePreviewAsUpload = () => {
