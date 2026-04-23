@@ -100,7 +100,7 @@ class KiosksService {
       body,
     );
 
-    return VisitCreateResponseSchema.parse(response);
+    return VisitCreateResponseSchema.passthrough().parse(response);
   }
 
   async getVisitById(visitId: string) {

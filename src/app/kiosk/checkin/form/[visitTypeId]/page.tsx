@@ -161,9 +161,10 @@ export default function Page() {
         if (data.visitor) {
           setVisitor(data.visitor);
           setImageUrl(data.visitor.photo_url ?? kioskImageUrl ?? null);
-        } else if (data.visit && data.visit.visitor_id) {
+        } else if (data.visit && data.visit.visitor) {
           // If server returned nested visit aggregate with visitor, use it
-          setVisitor(data.visitor ?? {});
+          setVisitor(data.visit.visitor ?? {});
+          setImageUrl(data.visit.visitor?.photo_url ?? kioskImageUrl ?? null);
         }
 
         router.push("/kiosk/checkin/success");

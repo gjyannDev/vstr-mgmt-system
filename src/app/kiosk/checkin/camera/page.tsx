@@ -54,6 +54,11 @@ export default function Page() {
         if (data.visitor) {
           store.setVisitor(data.visitor);
           store.setImageUrl(data.visitor.photo_url ?? store.imageUrl ?? null);
+        } else if (data.visit && data.visit.visitor) {
+          store.setVisitor(data.visit.visitor ?? {});
+          store.setImageUrl(
+            data.visit.visitor?.photo_url ?? store.imageUrl ?? null,
+          );
         }
 
         router.push("/kiosk/checkin/success");
