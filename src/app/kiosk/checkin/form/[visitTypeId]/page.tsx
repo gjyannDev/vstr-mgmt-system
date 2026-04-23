@@ -82,6 +82,16 @@ export default function Page() {
         case "checkbox":
           schemaField = required ? z.boolean() : z.boolean().optional();
           break;
+
+        case "textarea":
+          schemaField = z.string();
+          if (!required) schemaField = schemaField.optional();
+          if (required)
+            schemaField = (schemaField as any).min(
+              1,
+              `${f.label || name} is required`,
+            );
+          break;
         case "select":
           schemaField = required ? z.string().min(1) : z.string().optional();
           break;

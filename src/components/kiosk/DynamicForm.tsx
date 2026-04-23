@@ -3,6 +3,9 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import { TextField } from "@/my-components/shared/form/TextField";
+import { SelectField } from "@/my-components/shared/form/SelectField";
+import { CheckboxField } from "@/my-components/shared/form/CheckBoxField";
+import { TextAreaField } from "@/my-components/shared/form/TextAreaField";
 import type { VisitTypeField } from "@/features/visit-types/schemas/visit-type.schemas";
 
 type Props = {
@@ -10,44 +13,55 @@ type Props = {
 };
 
 export default function DynamicForm({ formFields }: Props) {
-  const { register, formState } = useFormContext();
+  const { register, formState, control } = useFormContext();
 
   return (
     <div className="flex flex-col gap-4">
       {formFields?.map((f) => {
         const key = f.name;
         switch (f.type) {
-          case "select":
+          case "select": {
+            const options = (f.options ?? []).map((opt: any) => ({
+              value: String(opt ?? ""),
+              label: String(opt ?? ""),
+            }));
+
             return (
-              <div key={key}>
-                <label className="block text-sm font-medium text-muted-foreground mb-1">
-                  {f.label}
-                </label>
-                <select
-                  {...register(key)}
-                  className="w-full border rounded px-2 py-1"
-                >
-                  <option value="">Select</option>
-                  {f.options?.map((opt) => (
-                    <option key={opt} value={opt}>
-                      {opt}
-                    </option>
-                  ))}
-                </select>
-                {formState.errors?.[key] && (
-                  <p className="text-sm text-red-500">
-                    {String(formState.errors[key]?.message)}
-                  </p>
-                )}
-              </div>
+              <SelectField
+                key={key}
+                name={key}
+                label={f.label}
+                control={control}
+                options={options}
+                fullWidth
+                error={String(formState.errors?.[key]?.message ?? "")}
+              />
             );
+          }
+
           case "checkbox":
             return (
-              <div key={key} className="flex items-center gap-2">
-                <input type="checkbox" {...register(key)} />
-                <label className="text-sm">{f.label}</label>
-              </div>
+              <CheckboxField
+                key={key}
+                name={key}
+                control={control}
+                label={f.label}
+                error={String(formState.errors?.[key]?.message ?? "")}
+              />
             );
+
+          case "textarea":
+            return (
+              <TextAreaField
+                key={key}
+                name={key}
+                label={f.label}
+                placeholder={f.placeholder ?? ""}
+                register={register}
+                error={String(formState.errors?.[key]?.message ?? "")}
+              />
+            );
+
           default:
             return (
               <TextField
