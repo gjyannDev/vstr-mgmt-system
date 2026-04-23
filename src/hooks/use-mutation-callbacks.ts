@@ -82,11 +82,15 @@ const getErrorMessage = (err?: unknown) => {
     }
   }
 
-  // Handle standard Axios errors
-  if (axios.isAxiosError(err)) {
-    const data = err.response?.data;
+  // Handle standard Axios-like errors (duck-typed)
+  if (typeof err === "object" && err !== null && "response" in err) {
+    const e = err as any;
+    const data = e.response?.data;
 
-    if (!data) return err.message;
+    if (!data)
+      return (
+        e?.message ?? (e instanceof Error ? e.message : "Please try again.")
+      );
 
     if (typeof data === "string") return data;
 
@@ -96,14 +100,18 @@ const getErrorMessage = (err?: unknown) => {
       try {
         return JSON.stringify(data.message);
       } catch {
-        return err.message;
+        return (
+          e?.message ?? (e instanceof Error ? e.message : "Please try again.")
+        );
       }
     }
 
     try {
       return JSON.stringify(data);
     } catch {
-      return err.message;
+      return (
+        e?.message ?? (e instanceof Error ? e.message : "Please try again.")
+      );
     }
   }
 

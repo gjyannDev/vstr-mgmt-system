@@ -45,9 +45,10 @@ class KiosksService {
     return CreateKioskResponseSchema.parse(response);
   }
 
-  async regenerateCode(
-    kioskId: string,
-  ): Promise<{ activation_code: string; activation_expires_at?: string }> {
+  async regenerateCode(kioskId: string): Promise<{
+    activation_code: string;
+    activation_expires_at?: string | null;
+  }> {
     const response = await apiClient.post<unknown, unknown>(
       `${this.basePath}/${kioskId}/regenerate`,
       {},

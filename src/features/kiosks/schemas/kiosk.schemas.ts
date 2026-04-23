@@ -4,6 +4,11 @@ export const KioskSchema = z.object({
   id: z.string(),
   tenant_id: z.string(),
   location_id: z.string(),
+  visit_type_ids: z.array(z.string()).nullable().optional(),
+  visit_types: z
+    .array(z.object({ id: z.string(), name: z.string() }))
+    .nullable()
+    .optional(),
   name: z.string(),
   status: z.string(),
   last_seen_at: z.string().nullable().optional(),
@@ -32,6 +37,7 @@ export const CreateKioskResponseSchema = KioskSingleResponseSchema.extend({
 export const CreateKioskSchema = z.object({
   name: z.string().min(1),
   location_id: z.string().uuid(),
+  visit_type_ids: z.array(z.string().uuid()).optional(),
   status: z.string().optional(),
 });
 

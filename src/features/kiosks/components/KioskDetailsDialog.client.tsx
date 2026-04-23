@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import type { Kiosk } from "@/features/kiosks/schemas/kiosk.schemas";
 import Countdown from "@/features/kiosks/components/Countdown.client";
+// visit types are shown from kiosk payload (server may include `visit_types`)
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -70,6 +71,8 @@ export default function KioskDetailsDialog({
     }
   }, [open, kiosk.id, detailData?.kiosk?.active_code_expires_at]);
 
+  const visitTypes = detailData?.kiosk?.visit_types ?? kiosk.visit_types ?? [];
+
   const handleCopy = async () => {
     if (!storedCode?.code) return;
     try {
@@ -101,6 +104,17 @@ export default function KioskDetailsDialog({
             <div className="text-sm text-muted-foreground">Kiosk ID</div>
             <div className="font-mono text-sm">
               {detailData?.kiosk?.id ?? kiosk.id}
+            </div>
+          </div>
+
+          <div>
+            <div className="text-sm text-muted-foreground">Visit types</div>
+            <div className="font-medium">
+              {visitTypes && visitTypes.length > 0 ? (
+                <span>{visitTypes.map((t: any) => t.name).join(", ")}</span>
+              ) : (
+                <span className="text-sm text-muted-foreground">-</span>
+              )}
             </div>
           </div>
 

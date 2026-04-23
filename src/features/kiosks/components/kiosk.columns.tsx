@@ -32,6 +32,24 @@ export const kioskColumns: ColumnDef<Kiosk>[] = [
     },
   },
   {
+    accessorKey: "visit_types",
+    header: "Visit Types",
+    cell: ({ row }) => {
+      const vts = row.original.visit_types;
+      const vtNames =
+        vts && vts.length > 0
+          ? vts.map((t: any) => t.name).join(", ")
+          : row.original.visit_type_ids &&
+              row.original.visit_type_ids.length > 0
+            ? row.original.visit_type_ids
+                .map((id: string) => String(id).split("-")[0])
+                .join(", ")
+            : EMPTY_VALUE;
+
+      return <span className="text-sm">{vtNames}</span>;
+    },
+  },
+  {
     accessorKey: "last_seen_at",
     header: "Last seen",
     cell: ({ row }) => {

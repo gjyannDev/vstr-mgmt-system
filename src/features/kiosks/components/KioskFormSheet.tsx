@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { kioskKeys } from "@/features/kiosks/queries/kiosk.keys";
+import { useGetVisitTypes } from "@/features/visit-types/queries/visit-type.queries";
 
 import { Button } from "@/components/ui/button";
 import { SelectField } from "@/my-components/shared/form/SelectField";
@@ -62,6 +63,7 @@ export default function KioskFormSheet({
     defaultValues: {
       name: "",
       location_id: locationId ?? "",
+      visit_type_ids: [],
       status: "active",
     },
   });
@@ -69,9 +71,16 @@ export default function KioskFormSheet({
   const {
     register,
     control,
+    watch,
     handleSubmit,
     formState: { errors },
   } = form;
+
+  const selectedLocation = watch("location_id") ?? locationId ?? "";
+  const { data: visitTypes } = useGetVisitTypes(String(selectedLocation), {
+    pageIndex: 0,
+    pageSize: 200,
+  });
 
   useEffect(() => {
     // noop: we don't need to perform extra side-effects on open
@@ -103,7 +112,9 @@ export default function KioskFormSheet({
           const created = data?.kiosk;
           if (created) {
             // Update any paginated list caches that match
-            const queries = queryClient.getQueriesData(kioskKeys.list.all());
+            const queries = queryClient.getQueriesData({
+              queryKey: kioskKeys.list.all(),
+            });
             queries.forEach(([key, old]: any) => {
               try {
                 queryClient.setQueryData(key, (prev: any) => {
@@ -182,6 +193,30 @@ export default function KioskFormSheet({
                 fullWidth
                 error={errors.location_id?.message}
               />
+
+              <div>
+                <div className="text-sm text-muted-foreground">
+                  Visit Types (optional)
+                </div>
+                <div className="grid grid-cols-1 gap-2 mt-2">
+                  {(visitTypes?.rows ?? []).map((vt: any) => (
+                    <label key={vt.id} className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        value={vt.id}
+                        {...register("visit_type_ids")}
+                        className="h-4 w-4"
+                      />
+                      <span className="text-sm">{vt.name}</span>
+                    </label>
+                  ))}
+                </div>
+                {errors.visit_type_ids?.message && (
+                  <div className="text-red-600 text-sm">
+                    {String(errors.visit_type_ids?.message)}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 

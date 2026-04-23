@@ -52,6 +52,21 @@ export default function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Protect kiosk routes: require kiosk session for any /kiosk* paths
+  if (pathname.startsWith("/kiosk")) {
+    if (!token) {
+      return NextResponse.redirect(new URL(KIOSK_ACTIVATE_PATH, request.url));
+    }
+
+    if (!isKioskRole(role)) {
+      const activateUrl = new URL(KIOSK_ACTIVATE_PATH, request.url);
+      activateUrl.searchParams.set("reason", "forbidden");
+      return NextResponse.redirect(activateUrl);
+    }
+
+    return NextResponse.next();
+  }
+
   if (!pathname.startsWith("/admin")) {
     return NextResponse.next();
   }
@@ -96,5 +111,7 @@ export const config = {
     "/activate/verify",
     "/activate/verify-manual",
     "/activate/success",
+    "/kiosk",
+    "/kiosk/:path*",
   ],
 };

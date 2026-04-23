@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -34,9 +35,11 @@ export default function Page() {
 
             {/* Actions */}
             <div className="flex flex-col gap-3">
-              <Button className="w-full h-12" size="lg">
-                Start Kiosk
-              </Button>
+              <Link href="/kiosk/start">
+                <Button className="w-full h-12" size="lg">
+                  Start Kiosk
+                </Button>
+              </Link>
             </div>
           </div>
         </CardContent>

@@ -24,7 +24,10 @@ API.interceptors.request.use((config) => {
   const raw = localStorage.getItem("auth-storage");
   const token = raw ? JSON.parse(raw)?.state?.token : null;
 
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  if (token) {
+    config.headers = config.headers ?? {};
+    (config.headers as any).Authorization = `Bearer ${token}`;
+  }
 
   return config;
 });
