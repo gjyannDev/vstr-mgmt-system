@@ -15,6 +15,7 @@ import {
   CreateFormFieldSchema,
   type VisitTypeField,
 } from "@/features/visit-types/schemas/visit-type.schemas";
+import { Trash2Icon } from "lucide-react";
 
 interface Props {
   open: boolean;
@@ -95,30 +96,39 @@ export default function FormFieldDialog({
           />
 
           {type === "select" && (
-            <div>
+            <div className="w-full">
               <label className="text-sm font-display font-bold">Options</label>
-              <div className="flex flex-col gap-2 mt-2">
+
+              <div className="flex flex-col gap-2 mt-2 w-full">
                 {optionFields.map((optField, idx) => (
-                  <div key={optField.id} className="flex gap-2">
+                  <div key={optField.id} className="flex gap-2 w-full">
                     <input
-                      className="input"
+                      className="input flex-1 w-full"
                       defaultValue={
                         (watch("options") as string[] | undefined)?.[idx] ??
                         (initial?.options ? initial.options[idx] : "")
                       }
                       {...register(`options.${idx}` as unknown as any)}
                     />
+
                     <Button
                       type="button"
                       variant="outline"
+                      size="icon"
+                      className="shrink-0"
                       onClick={() => removeOptionField(idx)}
                     >
-                      Remove
+                      <Trash2Icon size={16} />
                     </Button>
                   </div>
                 ))}
 
-                <Button type="button" onClick={addOption} variant="outline">
+                <Button
+                  type="button"
+                  onClick={addOption}
+                  variant="outline"
+                  className="w-full"
+                >
                   Add option
                 </Button>
               </div>

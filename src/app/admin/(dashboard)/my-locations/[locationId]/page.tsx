@@ -1,9 +1,10 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useGetLocationById } from "@/features/locations/queries/location.queries";
 import VisitTypesTable from "@/features/visit-types/components/VisitTypesTable";
+import KiosksTable from "@/features/kiosks/components/KiosksTable";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -17,6 +18,9 @@ import Link from "next/link";
 export default function LocationDetailsPage() {
   const params = useParams();
   const locationId = params?.locationId as string;
+
+  const searchParams = useSearchParams();
+  const defaultTab = searchParams?.get("tab") ?? "visit-types";
 
   const { data } = useGetLocationById(locationId);
 
@@ -61,7 +65,7 @@ export default function LocationDetailsPage() {
         </div>
       </div>
 
-      <Tabs defaultValue="visit-types" className="w-full flex flex-col">
+      <Tabs defaultValue={defaultTab} className="w-full flex flex-col">
         <TabsList className="flex gap-6 bg-transparent justify-start border-none shadow-none p-0 mb-4">
           <TabsTrigger value="visit-types" className={tabTriggerClass}>
             Visit Types
@@ -75,7 +79,7 @@ export default function LocationDetailsPage() {
           <VisitTypesTable locationId={locationId} />
         </TabsContent>
         <TabsContent value="kiosk" className="w-full">
-          <h1>Kiosk Management</h1>
+          <KiosksTable locationId={locationId} />
         </TabsContent>
       </Tabs>
     </div>
