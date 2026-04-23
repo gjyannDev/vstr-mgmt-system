@@ -10,6 +10,14 @@ import {
   type KioskListParams,
   type CreateKioskValues,
 } from "@/features/kiosks/schemas/kiosk.schemas";
+import type { CreateVisitResponseValues } from "@/lib/schemas/kiosk";
+import { VisitCreateResponseSchema } from "@/lib/schemas/kiosk";
+import {
+  KioskVisitTypePaginatedResponseSchema,
+  KioskVisitTypeSingleResponseSchema,
+  type KioskVisitTypePaginatedResponse,
+  type KioskVisitTypeSingleResponse,
+} from "@/features/visit-types/schemas/visit-type.schemas";
 
 class KiosksService {
   private basePath = "/api/admin/kiosks";
@@ -62,6 +70,59 @@ class KiosksService {
       `${this.basePath}/${kioskId}/revoke-tokens`,
       {},
     );
+  }
+
+  // Kiosk client methods (moved from lib/api/kiosk)
+  async fetchVisitTypes(
+    locationId: string,
+  ): Promise<KioskVisitTypePaginatedResponse> {
+    const response = await apiClient.get<unknown>(
+      `/api/kiosk/locations/${locationId}/visit-types?with=formFields`,
+    );
+
+    return KioskVisitTypePaginatedResponseSchema.parse(response);
+  }
+
+  async fetchVisitTypeById(
+    locationId: string,
+    visitTypeId: string,
+  ): Promise<KioskVisitTypeSingleResponse> {
+    const response = await apiClient.get<unknown>(
+      `/api/kiosk/locations/${locationId}/visit-types/${visitTypeId}`,
+    );
+
+    return KioskVisitTypeSingleResponseSchema.parse(response);
+  }
+
+  async createOrSaveVisit(body: CreateVisitResponseValues) {
+    const response = await apiClient.post<unknown, CreateVisitResponseValues>(
+      `/api/kiosk/visit-responses`,
+      body,
+    );
+
+    return VisitCreateResponseSchema.parse(response);
+  }
+
+  async getVisitById(visitId: string) {
+    const response = await apiClient.get<unknown>(
+      `/api/kiosk/visit-responses/${visitId}`,
+    );
+    return response;
+  }
+
+  async getVisitByQr(qrCode: string) {
+    const response = await apiClient.get<unknown>(
+      `/api/visits/by-qr/${qrCode}`,
+    );
+    return response;
+  }
+
+  async checkoutVisit(visitId: string) {
+    const response = await apiClient.patch<unknown, any>(
+      `/api/kiosk/visits/${visitId}/checkout`,
+      {},
+    );
+    return response;
   }
 }
 

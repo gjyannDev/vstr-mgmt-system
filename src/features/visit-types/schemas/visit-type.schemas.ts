@@ -77,3 +77,28 @@ export type VisitTypeSingleResponse = z.infer<
 >;
 export type CreateVisitTypeValues = z.infer<typeof CreateVisitTypeSchema>;
 export type UpdateVisitTypeValues = z.infer<typeof UpdateVisitTypeSchema>;
+
+// Kiosk-specific (simplified) visit type schemas
+export const KioskVisitTypeSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string().nullable().optional(),
+  is_camera_active: z.boolean().optional(),
+  form_fields: z.array(VisitTypeFieldSchema).nullable().optional(),
+});
+
+export const KioskVisitTypePaginatedResponseSchema = z.object({
+  rows: z.array(KioskVisitTypeSchema),
+  totalCount: z.number(),
+});
+
+export const KioskVisitTypeSingleResponseSchema = z.object({
+  visit_type: KioskVisitTypeSchema,
+});
+
+export type KioskVisitTypePaginatedResponse = z.infer<
+  typeof KioskVisitTypePaginatedResponseSchema
+>;
+export type KioskVisitTypeSingleResponse = z.infer<
+  typeof KioskVisitTypeSingleResponseSchema
+>;

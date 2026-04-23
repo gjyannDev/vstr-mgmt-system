@@ -9,6 +9,7 @@ import type {
   KioskListParams,
   CreateKioskValues,
 } from "@/features/kiosks/schemas/kiosk.schemas";
+import type { CreateVisitResponseValues } from "@/lib/schemas/kiosk";
 
 export const useGetKiosks = (params: KioskListParams) => {
   return useQuery<KioskPaginatedResponse, Error>({
@@ -62,6 +63,43 @@ export const useRevokeKioskTokens = () => {
       queryClient.invalidateQueries({ queryKey: kioskKeys.list.all() });
       queryClient.invalidateQueries({
         queryKey: kioskKeys.detail.byId(kioskId),
+      });
+    },
+  });
+};
+
+// Kiosk client hooks (moved from features/kiosk/queries/kiosk.queries.ts)
+export const useFetchVisitTypes = (locationId?: string) => {
+  return useQuery({
+    queryKey: ["kiosk", "visitTypes", locationId],
+    queryFn: () => kiosksService.fetchVisitTypes(locationId ?? ""),
+    enabled: Boolean(locationId),
+  });
+};
+
+export const useFetchVisitTypeById = (
+  locationId?: string,
+  visitTypeId?: string,
+) => {
+  return useQuery({
+    queryKey: ["kiosk", "visitType", locationId, visitTypeId],
+    queryFn: () =>
+      kiosksService.fetchVisitTypeById(locationId ?? "", visitTypeId ?? ""),
+    enabled: Boolean(locationId && visitTypeId),
+  });
+};
+
+export const useCreateOrSaveVisit = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: CreateVisitResponseValues) =>
+      kiosksService.createOrSaveVisit(payload),
+    onSuccess: () => {
+      qc.invalidateQueries({
+        predicate: (query) =>
+          Array.isArray(query.queryKey) &&
+          query.queryKey[0] === "kiosk" &&
+          query.queryKey[1] === "visitTypes",
       });
     },
   });

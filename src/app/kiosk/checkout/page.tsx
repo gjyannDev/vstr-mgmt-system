@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { kioskService } from "@/lib/api/kiosk";
+import { kiosksService } from "@/features/kiosks/services/kiosks.services";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
@@ -16,7 +16,7 @@ export default function Page() {
   const lookup = async () => {
     setLoading(true);
     try {
-      const res = await kioskService.getVisitByQr(code.trim());
+      const res = await kiosksService.getVisitByQr(code.trim());
       setVisit(res);
     } catch (err) {
       console.error(err);
@@ -30,7 +30,7 @@ export default function Page() {
     if (!visit?.visit?.id) return;
     setCheckingOut(true);
     try {
-      await kioskService.checkoutVisit(visit.visit.id);
+      await kiosksService.checkoutVisit(visit.visit.id);
       router.push("/kiosk/checkout/success");
     } catch (err) {
       console.error(err);

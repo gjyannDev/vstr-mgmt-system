@@ -35,6 +35,33 @@ API.interceptors.request.use((config) => {
 API.interceptors.response.use(
   (res) => res,
   (error) => {
+    // Normalize error so dev overlay / error boundaries receive an Error
+    let message = error?.message ?? "Unknown error";
+
+    try {
+      const payload = error?.response?.data ?? error;
+      if (typeof payload === "string") {
+        message = payload;
+      } else if (payload && typeof payload === "object") {
+        // Try to extract common fields, otherwise stringify
+        if (payload.message) {
+          message = String(payload.message);
+        } else {
+          message = JSON.stringify(
+            payload,
+            Object.getOwnPropertyNames(payload),
+            2,
+          );
+        }
+      }
+    } catch (e) {
+      // fallback to original message
+      message = error?.message ?? String(error);
+    }
+
+    const normalized = new Error(message);
+    (normalized as any).original = error;
+
     if (error.response?.status === 401) {
       if (typeof window !== "undefined") {
         localStorage.removeItem("auth-storage");
@@ -42,7 +69,8 @@ API.interceptors.response.use(
         window.location.href = "/admin/signin";
       }
     }
-    return Promise.reject(error);
+
+    return Promise.reject(normalized);
   },
 );
 

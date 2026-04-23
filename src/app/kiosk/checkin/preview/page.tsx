@@ -3,7 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useKioskStore } from "@/stores/useKioskStore";
-import { useCreateOrSaveVisit } from "@/features/kiosk/queries/kiosk.queries";
+import { useCreateOrSaveVisit } from "@/features/kiosks/queries/kiosks.queries";
 import { Button } from "@/components/ui/button";
 
 export default function Page() {

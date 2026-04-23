@@ -6,6 +6,7 @@ import type {
   ActivateKioskParams,
   AuthPayload,
   KioskActivationPayload,
+  KioskProfilePayload,
   LocationCheckParams,
   LoginParams,
   RegisterParams,
@@ -136,6 +137,14 @@ export const useKioskPing = () => {
     queryKey: authKeys.access.kioskPing(),
     queryFn: () => authService.kioskPing(),
     enabled: Boolean(token),
+  });
+};
+
+export const useGetKioskMe = () => {
+  return useQuery<KioskProfilePayload, Error>({
+    queryKey: authKeys.kiosk.me(),
+    queryFn: () => authService.getKioskMe(),
+    staleTime: 1000 * 60 * 2,
   });
 };
 
