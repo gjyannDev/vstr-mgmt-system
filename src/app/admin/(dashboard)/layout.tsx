@@ -52,7 +52,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         <AppSidebar />
 
         <SidebarInset className="flex min-w-0 flex-1 flex-col md:ml-[var(--sidebar-width)] md:peer-data-[state=collapsed]:ml-[var(--sidebar-width-icon)] transition-[margin-left] duration-200 ease-linear">
-          <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b bg-background/95 px-4 shadow-xs md:h-16 md:px-6">
+          <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b bg-background px-4 shadow-xs md:h-16 md:px-6">
             <SidebarTrigger />
             <p className="font-display text-xl text-black-secondary">
               {getPageTitle(pathname)}

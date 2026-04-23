@@ -30,6 +30,39 @@ const LOCATION_TYPE_OPTIONS = [
   { value: "store", label: "Store" },
   { value: "warehouse", label: "Warehouse" },
   { value: "hub", label: "Hub" },
+
+  // Office / Corporate
+  { value: "office", label: "Office" },
+  { value: "head_office", label: "Head Office" },
+  { value: "coworking_space", label: "Co-working Space" },
+
+  // Residential
+  { value: "condominium", label: "Condominium" },
+  { value: "apartment", label: "Apartment" },
+  { value: "subdivision", label: "Subdivision / Village" },
+
+  // Commercial / Public
+  { value: "mall", label: "Shopping Mall" },
+  { value: "restaurant", label: "Restaurant" },
+  { value: "hotel", label: "Hotel" },
+  { value: "event_venue", label: "Event Venue" },
+
+  // Institutional
+  { value: "school", label: "School / University" },
+  { value: "hospital", label: "Hospital / Clinic" },
+  { value: "government", label: "Government Office" },
+
+  // Industrial
+  { value: "factory", label: "Factory" },
+  { value: "plant", label: "Plant / Industrial Site" },
+
+  // Transport / Security-heavy
+  { value: "airport", label: "Airport" },
+  { value: "seaport", label: "Seaport" },
+
+  // Misc
+  { value: "data_center", label: "Data Center" },
+  { value: "other", label: "Other" },
 ];
 
 const LOCATION_STATE_OPTIONS = [

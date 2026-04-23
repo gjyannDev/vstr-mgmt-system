@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Dialog,
@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/my-components/shared/form/TextField";
 import { SelectField } from "@/my-components/shared/form/SelectField";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   CreateFormFieldSchema,
   type VisitTypeField,
@@ -87,6 +88,7 @@ export default function FormFieldDialog({
             control={control}
             options={[
               { value: "text", label: "Text" },
+              { value: "textarea", label: "Textarea" },
               { value: "number", label: "Number" },
               { value: "select", label: "Select" },
               { value: "checkbox", label: "Checkbox" },
@@ -94,6 +96,23 @@ export default function FormFieldDialog({
             ]}
             fullWidth
           />
+
+          <div className="flex items-center gap-2">
+            <Controller
+              control={control}
+              name="required"
+              render={({ field }) => (
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="required"
+                    checked={!!field.value}
+                    onCheckedChange={(val) => field.onChange(Boolean(val))}
+                  />
+                  <span className="text-sm font-display">Required</span>
+                </div>
+              )}
+            />
+          </div>
 
           {type === "select" && (
             <div className="w-full">
