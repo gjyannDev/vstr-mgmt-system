@@ -43,9 +43,19 @@ export default function Page() {
 
     create.mutate(payload, {
       onSuccess: (data: any) => {
-        store.setVisitId(data.visit_id ?? null);
-        store.setQrCode(data.qr_code ?? null);
-        store.setSessionKey(data.session_key ?? null);
+        const visitId = data.visit_id ?? data.visit?.id ?? null;
+        const sessionKey = data.session_key ?? data.visit?.session_key ?? null;
+        const qrCode = data.qr_code ?? data.visit?.qr_code ?? null;
+
+        store.setVisitId(visitId);
+        store.setSessionKey(sessionKey);
+        store.setQrCode(qrCode);
+
+        if (data.visitor) {
+          store.setVisitor(data.visitor);
+          store.setImageUrl(data.visitor.photo_url ?? store.imageUrl ?? null);
+        }
+
         router.push("/kiosk/checkin/success");
       },
     });

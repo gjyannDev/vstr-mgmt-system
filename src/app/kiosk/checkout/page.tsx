@@ -1,22 +1,28 @@
 "use client";
 
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { kiosksService } from "@/features/kiosks/services/kiosks.services";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
+import { TextField } from "@/my-components/shared/form/TextField";
 
 export default function Page() {
-  const [code, setCode] = useState("");
+  const { register, handleSubmit, formState } = useForm<{ code: string }>({
+    defaultValues: { code: "" },
+  });
+
   const [visit, setVisit] = useState<any | null>(null);
   const [loading, setLoading] = useState(false);
   const [checkingOut, setCheckingOut] = useState(false);
   const router = useRouter();
 
-  const lookup = async () => {
+  const lookup = async (values: { code: string }) => {
+    const code = (values.code ?? "").trim();
     setLoading(true);
     try {
-      const res = await kiosksService.getVisitByQr(code.trim());
+      const res = await kiosksService.getVisitByIdNumber(code);
       setVisit(res);
     } catch (err) {
       console.error(err);
@@ -40,41 +46,73 @@ export default function Page() {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl mb-4">Check‑out</h2>
-      <div className="flex gap-2 mb-4">
-        <input
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          placeholder="Enter card code"
-          className="border px-2 py-1 rounded"
-        />
-        <Button onClick={lookup} disabled={loading || !code.trim()}>
-          {loading ? "Looking up..." : "Lookup"}
-        </Button>
-      </div>
-
-      {visit && (
-        <Card>
-          <CardContent>
-            <h3 className="font-bold">
-              {visit.visit?.visitor?.full_name ?? "Visitor"}
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              {visit.visit?.visitor?.company}
-            </p>
-            <p className="mt-2">Status: {visit.visit?.status}</p>
-            <div className="mt-4 flex gap-2">
-              <Button onClick={checkout} disabled={checkingOut}>
-                {checkingOut ? "Checking out..." : "Confirm Checkout"}
-              </Button>
-              <Button variant="ghost" onClick={() => setVisit(null)}>
-                Cancel
-              </Button>
+    <div className="min-h-screen flex items-center justify-center bg-muted/40 px-4">
+      <Card className="w-full max-w-md border-none shadow-none bg-transparent focus-visible:ring-0">
+        <CardContent className="p-0 text-center">
+          <div className="flex flex-col gap-12">
+            <div className="flex flex-col gap-2">
+              <h1 className="text-5xl font-display tracking-tight">
+                Check‑out
+              </h1>
+              <p className="font-sanstext-md text-muted-foreground leading-relaxed">
+                Enter the visitor card code to lookup and check them out.
+              </p>
             </div>
-          </CardContent>
-        </Card>
-      )}
+
+            <form
+              onSubmit={handleSubmit(lookup)}
+              className="flex flex-col gap-4 text-left"
+              noValidate
+            >
+              <TextField
+                name="code"
+                label="Card code"
+                placeholder="Enter card code"
+                register={register}
+                error={formState.errors.code?.message as any}
+                autoComplete="one-time-code"
+              />
+
+              <div className="flex gap-2">
+                <Button type="submit" className="flex-1" disabled={loading}>
+                  {loading ? "Looking up..." : "Lookup"}
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={() => setVisit(null)}
+                  disabled={loading}
+                >
+                  Clear
+                </Button>
+              </div>
+            </form>
+
+            {visit && (
+              <Card className="w-full">
+                <CardContent>
+                  <h3 className="font-bold">
+                    {visit?.visitor?.full_name ??
+                      visit.visit?.visitor_id ??
+                      "Visitor"}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {visit?.visitor?.company ?? ""}
+                  </p>
+                  <p className="mt-2">Status: {visit.visit?.status}</p>
+                  <div className="mt-4 flex gap-2">
+                    <Button onClick={checkout} disabled={checkingOut}>
+                      {checkingOut ? "Checking out..." : "Confirm Checkout"}
+                    </Button>
+                    <Button variant="ghost" onClick={() => setVisit(null)}>
+                      Cancel
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

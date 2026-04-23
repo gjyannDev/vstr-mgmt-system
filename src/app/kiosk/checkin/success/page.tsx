@@ -20,11 +20,11 @@ export default function Page() {
   };
 
   return (
-    <div className="p-4 flex flex-col items-center gap-6">
-      <h2 className="text-2xl">Check‑in Successful</h2>
+    <div className="flex flex-col items-center gap-2">
       <VisitCard
-        name={store.visitor?.full_name}
+        name={store.visitor?.full_name ?? store.visitor?.name}
         company={store.visitor?.company}
+        idNumber={store.visitor?.id_number}
         imageUrl={store.imageUrl}
         qrPayload={
           store.qrCode

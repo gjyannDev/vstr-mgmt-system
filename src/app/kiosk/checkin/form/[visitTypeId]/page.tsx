@@ -25,6 +25,7 @@ export default function Page() {
   const setQrCode = useKioskStore((s) => s.setQrCode);
   const setFormData = useKioskStore((s) => s.setFormData);
   const setVisitor = useKioskStore((s) => s.setVisitor);
+  const setImageUrl = useKioskStore((s) => s.setImageUrl);
 
   const kioskFormData = useKioskStore((s) => s.formData);
   const kioskVisitor = useKioskStore((s) => s.visitor);
@@ -147,9 +148,24 @@ export default function Page() {
 
     createMutation.mutate(payload, {
       onSuccess: (data: any) => {
-        setVisitId(data.visit_id ?? null);
-        setSessionKey(data.session_key ?? null);
-        setQrCode(data.qr_code ?? null);
+        // Prefer top-level fields, fallback to nested visit/visitor shape
+        const visitId = data.visit_id ?? data.visit?.id ?? null;
+        const sessionKey = data.session_key ?? data.visit?.session_key ?? null;
+        const qrCode = data.qr_code ?? data.visit?.qr_code ?? null;
+
+        setVisitId(visitId);
+        setSessionKey(sessionKey);
+        setQrCode(qrCode);
+
+        // Persist visitor data returned from server (includes generated id_number)
+        if (data.visitor) {
+          setVisitor(data.visitor);
+          setImageUrl(data.visitor.photo_url ?? kioskImageUrl ?? null);
+        } else if (data.visit && data.visit.visitor_id) {
+          // If server returned nested visit aggregate with visitor, use it
+          setVisitor(data.visitor ?? {});
+        }
+
         router.push("/kiosk/checkin/success");
       },
     });

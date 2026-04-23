@@ -117,6 +117,13 @@ class KiosksService {
     return response;
   }
 
+  async getVisitByIdNumber(idNumber: string) {
+    const response = await apiClient.get<unknown>(
+      `/api/kiosk/visits/by-id/${encodeURIComponent(idNumber)}`,
+    );
+    return response;
+  }
+
   async checkoutVisit(visitId: string) {
     const response = await apiClient.patch<unknown, any>(
       `/api/kiosk/visits/${visitId}/checkout`,

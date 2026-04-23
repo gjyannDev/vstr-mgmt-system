@@ -6,6 +6,7 @@ type Visitor = {
   full_name?: string;
   email?: string;
   phone?: string;
+  id_number?: string;
   company?: string;
   [key: string]: any;
 };
