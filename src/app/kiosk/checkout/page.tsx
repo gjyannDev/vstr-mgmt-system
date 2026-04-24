@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLookupVisitByIdNumber } from "@/features/kiosks/queries/kiosks.queries";
 import { useMutationCallbacks } from "@/hooks/use-mutation-callbacks";
-import { kiosksService } from "@/features/kiosks/services/kiosks.services";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
@@ -15,7 +14,6 @@ export default function Page() {
     defaultValues: { code: "" },
   });
 
-  const [visit, setVisit] = useState<any | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [checkingOut, setCheckingOut] = useState(false);
   const router = useRouter();
@@ -30,21 +28,22 @@ export default function Page() {
     setErrorMessage(null);
     try {
       const res = await lookupMutateAsync(code);
-      setVisit(res);
 
-      if (!res) {
-        const notFoundErr = {
-          status: 404,
-          message: "Visitor not found for given ID.",
-        };
-        buildCallbacks("change", code, {
-          errorMessage: "Visitor not found",
-        }).onError(notFoundErr);
-        setErrorMessage("Visitor not found for given ID.");
+      if (res && res.visit?.id) {
+        router.push(`/kiosk/checkout/visit/${res.visit.id}`);
+        return;
       }
+
+      const notFoundErr = {
+        status: 404,
+        message: "Visitor not found for given ID.",
+      };
+      buildCallbacks("change", code, {
+        errorMessage: "Visitor not found",
+      }).onError(notFoundErr);
+      setErrorMessage("Visitor not found for given ID.");
     } catch (err) {
       console.error(err);
-      setVisit(null);
       buildCallbacks("change", code, { errorMessage: "Lookup failed" }).onError(
         err,
       );
@@ -54,18 +53,7 @@ export default function Page() {
     }
   };
 
-  const checkout = async () => {
-    if (!visit?.visit?.id) return;
-    setCheckingOut(true);
-    try {
-      await kiosksService.checkoutVisit(visit.visit.id);
-      router.push("/kiosk/checkout/success");
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setCheckingOut(false);
-    }
-  };
+  // Checkout handled on the dedicated visit detail page.
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted/40 px-4">
@@ -106,29 +94,7 @@ export default function Page() {
               )}
             </form>
 
-            {visit && (
-              <Card className="w-full">
-                <CardContent>
-                  <h3 className="font-bold">
-                    {visit?.visitor?.full_name ??
-                      visit.visit?.visitor_id ??
-                      "Visitor"}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {visit?.visitor?.company ?? ""}
-                  </p>
-                  <p className="mt-2">Status: {visit.visit?.status}</p>
-                  <div className="mt-4 flex gap-2">
-                    <Button onClick={checkout} disabled={checkingOut}>
-                      {checkingOut ? "Checking out..." : "Confirm Checkout"}
-                    </Button>
-                    <Button variant="ghost" onClick={() => setVisit(null)}>
-                      Cancel
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+            {/* Visit details now shown on a dedicated page at /kiosk/checkout/visit/[visitId] */}
           </div>
         </CardContent>
       </Card>

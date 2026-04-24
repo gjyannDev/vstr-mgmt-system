@@ -10,6 +10,7 @@ import type {
   CreateKioskValues,
 } from "@/features/kiosks/schemas/kiosk.schemas";
 import type { CreateVisitResponseValues } from "@/lib/schemas/kiosk";
+import type { VisitAggregate } from "@/features/kiosks/types/visit.types";
 
 export const useGetKiosks = (params: KioskListParams) => {
   return useQuery<KioskPaginatedResponse, Error>({
@@ -106,8 +107,27 @@ export const useCreateOrSaveVisit = () => {
 };
 
 export const useLookupVisitByIdNumber = () => {
-  return useMutation({
+  return useMutation<VisitAggregate | null, Error, string>({
     mutationFn: (idNumber: string) =>
       kiosksService.getVisitByIdNumber(idNumber),
+  });
+};
+
+export const useGetVisitById = (visitId?: string) => {
+  return useQuery<VisitAggregate | null, Error>({
+    queryKey: ["kiosk", "visit", visitId],
+    queryFn: () => kiosksService.getVisitById(visitId ?? ""),
+    enabled: Boolean(visitId),
+  });
+};
+
+export const useCheckoutVisit = () => {
+  const qc = useQueryClient();
+
+  return useMutation<unknown, Error, string>({
+    mutationFn: (visitId: string) => kiosksService.checkoutVisit(visitId),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["kiosk", "visit"] });
+    },
   });
 };

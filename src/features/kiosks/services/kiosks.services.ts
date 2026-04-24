@@ -11,6 +11,7 @@ import {
   type CreateKioskValues,
 } from "@/features/kiosks/schemas/kiosk.schemas";
 import type { CreateVisitResponseValues } from "@/lib/schemas/kiosk";
+import type { VisitAggregate } from "@/features/kiosks/types/visit.types";
 import { VisitCreateResponseSchema } from "@/lib/schemas/kiosk";
 import {
   KioskVisitTypePaginatedResponseSchema,
@@ -104,10 +105,22 @@ class KiosksService {
   }
 
   async getVisitById(visitId: string) {
-    const response = await apiClient.get<unknown>(
-      `/api/kiosk/visit-responses/${visitId}`,
-    );
-    return response;
+    try {
+      const response = await apiClient.get<VisitAggregate | null>(
+        `/api/kiosk/visit-responses/${visitId}`,
+      );
+
+      return response;
+    } catch (err: any) {
+      const status =
+        err?.original?.response?.status ?? err?.response?.status ?? null;
+
+      if (status === 404) {
+        return null;
+      }
+
+      throw err;
+    }
   }
 
   async getVisitByQr(qrCode: string) {
@@ -119,7 +132,7 @@ class KiosksService {
 
   async getVisitByIdNumber(idNumber: string) {
     try {
-      const response = await apiClient.get<unknown>(
+      const response = await apiClient.get<VisitAggregate | null>(
         `/api/kiosk/visits/by-id/${encodeURIComponent(idNumber)}`,
       );
 
