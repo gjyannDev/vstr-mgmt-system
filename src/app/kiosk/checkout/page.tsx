@@ -77,13 +77,6 @@ export default function Page() {
                 <Button type="submit" className="flex-1" disabled={loading}>
                   {loading ? "Looking up..." : "Lookup"}
                 </Button>
-                <Button
-                  variant="ghost"
-                  onClick={() => setVisit(null)}
-                  disabled={loading}
-                >
-                  Clear
-                </Button>
               </div>
             </form>
 
