@@ -118,10 +118,22 @@ class KiosksService {
   }
 
   async getVisitByIdNumber(idNumber: string) {
-    const response = await apiClient.get<unknown>(
-      `/api/kiosk/visits/by-id/${encodeURIComponent(idNumber)}`,
-    );
-    return response;
+    try {
+      const response = await apiClient.get<unknown>(
+        `/api/kiosk/visits/by-id/${encodeURIComponent(idNumber)}`,
+      );
+
+      return response;
+    } catch (err: any) {
+      const status =
+        err?.original?.response?.status ?? err?.response?.status ?? null;
+
+      if (status === 404) {
+        return null;
+      }
+
+      throw err;
+    }
   }
 
   async checkoutVisit(visitId: string) {

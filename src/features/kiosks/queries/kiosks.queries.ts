@@ -104,3 +104,10 @@ export const useCreateOrSaveVisit = () => {
     },
   });
 };
+
+export const useLookupVisitByIdNumber = () => {
+  return useMutation({
+    mutationFn: (idNumber: string) =>
+      kiosksService.getVisitByIdNumber(idNumber),
+  });
+};

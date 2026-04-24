@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useLookupVisitByIdNumber } from "@/features/kiosks/queries/kiosks.queries";
+import { useMutationCallbacks } from "@/hooks/use-mutation-callbacks";
 import { kiosksService } from "@/features/kiosks/services/kiosks.services";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,21 +16,41 @@ export default function Page() {
   });
 
   const [visit, setVisit] = useState<any | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [checkingOut, setCheckingOut] = useState(false);
   const router = useRouter();
 
+  const { buildCallbacks } = useMutationCallbacks({ entityName: "Visit" });
+  const { mutateAsync: lookupMutateAsync, status: lookupStatus } =
+    useLookupVisitByIdNumber();
+  const isLookingUp = lookupStatus === "pending";
+
   const lookup = async (values: { code: string }) => {
     const code = (values.code ?? "").trim();
-    setLoading(true);
+    setErrorMessage(null);
     try {
-      const res = await kiosksService.getVisitByIdNumber(code);
+      const res = await lookupMutateAsync(code);
       setVisit(res);
+
+      if (!res) {
+        const notFoundErr = {
+          status: 404,
+          message: "Visitor not found for given ID.",
+        };
+        buildCallbacks("change", code, {
+          errorMessage: "Visitor not found",
+        }).onError(notFoundErr);
+        setErrorMessage("Visitor not found for given ID.");
+      }
     } catch (err) {
       console.error(err);
       setVisit(null);
-    } finally {
-      setLoading(false);
+      buildCallbacks("change", code, { errorMessage: "Lookup failed" }).onError(
+        err,
+      );
+      setErrorMessage(
+        (err as any)?.message ?? "Visitor not found for given ID.",
+      );
     }
   };
 
@@ -74,10 +96,14 @@ export default function Page() {
               />
 
               <div className="flex gap-2">
-                <Button type="submit" className="flex-1" disabled={loading}>
-                  {loading ? "Looking up..." : "Lookup"}
+                <Button type="submit" className="flex-1" disabled={isLookingUp}>
+                  {isLookingUp ? "Looking up..." : "Lookup"}
                 </Button>
               </div>
+
+              {errorMessage && (
+                <p className="text-sm text-red-600">{errorMessage}</p>
+              )}
             </form>
 
             {visit && (
