@@ -67,7 +67,7 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background px-6">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background px-6 py-12">
       <div className="flex flex-col gap-12 items-center w-full">
         {/* Header */}
         <div className="text-center">

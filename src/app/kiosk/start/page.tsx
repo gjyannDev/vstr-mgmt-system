@@ -7,19 +7,23 @@ import { ArrowUpRight, ArrowDownLeft } from "lucide-react";
 
 export default function Page() {
   const { data: kioskData } = useGetKioskMe();
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background px-6">
       {/* Header */}
-      <div className="flex flex-col gap-12">
+      <div className="flex flex-col gap-12 w-full items-center">
         <div className="text-center">
           <h1 className="text-8xl font-display italic text-primary mb-6">
             VisitNa!
           </h1>
-          <div className="flex flex-col gap">
-            <h2 className="text-3xl font-display text-foreground">
-              Welcome to Hotel
-            </h2>
+          <div className="flex flex-col gap-2">
+            <div className="text-center">
+              <p className="text-3xl font-display text-foreground">
+                Welcome to
+              </p>
+              <p className="text-3xl font-display text-foreground">
+                {kioskData?.kiosk?.location?.name ?? "our kiosk"}!
+              </p>
+            </div>
             <p className="text-muted-foreground">
               Choose any from below to start.
             </p>

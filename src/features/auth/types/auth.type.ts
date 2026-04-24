@@ -61,9 +61,18 @@ export type KioskDevice = {
   id: number;
   tenant_id: number | null;
   location_id: number | null;
+  location?: KioskLocation | null;
   name: string;
   status: "active" | "disabled" | string;
   last_seen_at: string | null;
+};
+
+export type KioskLocation = {
+  id?: string | number;
+  name?: string | null;
+  address_line1?: string | null;
+  city?: string | null;
+  state?: string | null;
 };
 
 export type AuthState = {
