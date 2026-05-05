@@ -80,11 +80,8 @@ export type AuthState = {
   user: User | null;
   token: string | null;
 
-  // setters
-  setAuth: (payload: { user: User; token: string }) => void;
+  setAuth: (payload: { user: User | null; token: string | null }) => void;
   setUser: (user: User | null) => void;
   setToken: (token: string | null) => void;
-
-  // clear
   clearAuth: () => void;
 };

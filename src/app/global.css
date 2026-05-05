@@ -9,29 +9,29 @@
 :root {
   /* ================= BASE COLORS ================= */
 
-  --color-background: oklch(0.9796 0.010054 32.5157);
-  --color-foreground: oklch(0.249 0.0204 236.59);
+  --color-background: oklch(97.8% 0.008 250);
+  --color-foreground: oklch(18% 0.035 255);
 
-  --color-card: oklch(0.9796 0.010054 32.5157);
-  --color-card-foreground: oklch(0.249 0.0204 236.59);
+  --color-card: oklch(97.8% 0.008 250);
+  --color-card-foreground: oklch(18% 0.035 255);
 
-  --color-popover: oklch(0.9796 0.010054 32.5157);
-  --color-popover-foreground: oklch(0.249 0.0204 236.59);
+  --color-popover: oklch(97.8% 0.008 250);
+  --color-popover-foreground: oklch(18% 0.035 255);
 
   /* ================= BRAND PRIMARY (#83b4ff) ================= */
   --color-primary: oklch(0.72 0.12 250);
-  --color-primary-foreground: oklch(0.9796 0.010054 32.5157);
+  --color-primary-foreground: oklch(97.8% 0.008 250);
 
   /* ================= SECONDARY / MUTED ================= */
   --color-secondary: oklch(0.94 0.005 250);
-  --color-secondary-foreground: oklch(0.249 0.0204 236.59);
+  --color-secondary-foreground: oklch(18% 0.035 255);
 
   --color-muted: oklch(0.94 0.005 250);
   --color-muted-foreground: oklch(0.55 0.01 250);
 
   /* ================= ACCENT ================= */
   --color-accent: oklch(0.9 0.02 250);
-  --color-accent-foreground: oklch(0.249 0.0204 236.59);
+  --color-accent-foreground: oklch(18% 0.035 255);
 
   /* ================= DESTRUCTIVE ================= */
   --color-destructive: oklch(0.704 0.191 22.216);
@@ -53,11 +53,11 @@
   --color-chart-5: oklch(37.1% 0 0);
 
   /* ================= SIDEBAR ================= */
-  --color-sidebar: oklch(0.249 0.0204 236.59);
-  --color-sidebar-foreground: oklch(0.9796 0.010054 32.5157);
+  --color-sidebar: oklch(18% 0.035 255);
+  --color-sidebar-foreground: oklch(97.8% 0.008 250);
 
   --color-sidebar-primary: oklch(0.72 0.12 250);
-  --color-sidebar-primary-foreground: oklch(0.9796 0.010054 32.5157);
+  --color-sidebar-primary-foreground: oklch(97.8% 0.008 250);
 
   --color-sidebar-accent: oklch(0.269 0 0);
   --color-sidebar-accent-foreground: oklch(0.985 0 0);
@@ -68,8 +68,8 @@
   --color-sidebar-default: oklch(0.725 0.009 255.37);
 
   /* ================= HEADER / FOOTER ================= */
-  --color-header: oklch(0.249 0.0204 236.59);
-  --color-header-foreground: oklch(0.9796 0.010054 32.5157);
+  --color-header: oklch(18% 0.035 255);
+  --color-header-foreground: oklch(97.8% 0.008 250);
 
   --color-footer: oklch(0.145 0 0);
   --color-footer-foreground: oklch(0.985 0 0);

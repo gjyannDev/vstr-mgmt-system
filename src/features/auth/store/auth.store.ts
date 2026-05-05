@@ -44,7 +44,7 @@ export const useAuthStore = create<AuthState>()(
       token: null,
 
       setAuth: ({ user, token }) => {
-        syncAuthCookies(token, user.role);
+        syncAuthCookies(token, user?.role ?? null);
         set({ hydrated: true, user, token });
       },
       setUser: (user) => {

@@ -69,7 +69,7 @@ export default function KiosksTable({ locationId }: Props) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="border bg-card p-4">
+      <div className="border bg-card p-4 rounded-xl">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-lg font-display">Filters</h3>
